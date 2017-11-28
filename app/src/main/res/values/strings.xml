@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Rent Car</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="registerTextView"><a href="http://www.google.com/">register</a></string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_username">Invalid Username</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- Strings related to branches -->
+
+    <string name="branchesTextView">Branches</string>
+
+</resources>
