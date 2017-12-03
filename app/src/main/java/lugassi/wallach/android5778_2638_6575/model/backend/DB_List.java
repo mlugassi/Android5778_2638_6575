@@ -118,7 +118,7 @@ public class DB_List implements DB_manager {
     @Override
     public boolean updateBranch(int branchID, ContentValues contentValues) {
         Branch branch = CarRentConst.contentValuesBranch(contentValues);
-        branch.setBranchID(branchID);
+       // branch.setBranchID(branchID);
         for (int i = 0; i < ListsDataSource.branchesList.size(); i++)
             if (ListsDataSource.branchesList.get(i).getBranchID() == branchID) {
                 ListsDataSource.branchesList.set(i,branch);

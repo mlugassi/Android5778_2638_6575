@@ -116,7 +116,7 @@ public class CarRentConst {
         branch.setMaxParkingSpace(contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
         branch.setCity(contentValues.getAsString(BranchConst.CITY));
         branch.setBranchName(contentValues.getAsString(BranchConst.BRANCH_NAME));
-        branch.setBranchID(contentValues.getAsInteger(BranchConst.BRANCH_ID));
+       // branch.setBranchID(contentValues.getAsInteger(BranchConst.BRANCH_ID));
         return branch;
     }
 
