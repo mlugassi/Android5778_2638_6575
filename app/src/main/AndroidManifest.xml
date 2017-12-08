@@ -12,14 +12,16 @@
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".controller.AddBranch" />
         <activity android:name=".controller.Login" />
-        <activity android:name=".controller.Branches" />
-        <activity android:name=".controller.Cars"></activity>
+        <activity android:name=".controller.DataLists" />
+        <activity android:name=".controller.AddCar" />
+        <activity android:name=".controller.AddCarModel"></activity>
     </application>
 
 </manifest>

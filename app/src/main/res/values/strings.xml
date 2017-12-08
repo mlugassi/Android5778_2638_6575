@@ -15,9 +15,31 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <!-- Strings Texts -->
 
-    <!-- Strings related to branches -->
+    <string name="textChooseDataList">Choose Data List To View And Edit:</string>
+    <string name="textName">Name: </string>
+    <string name="textID">ID : </string>
 
-    <string name="branchesTextView">Branches</string>
+    <!-- Strings Hints -->
+
+    <string name="hintName">Name</string>
+    <string name="hintCity">City</string>
+    <string name="hintAddress">Address</string>
+    <string name="hintParkingSpace">Parking Space</string>
+    <string name="hintSeats">Num of Seats</string>
+    <string name="hintMaxGas">Max Gas Tank</string>
+
+    <!-- Strings Buttons -->
+    <string name="buttonAdd">Add</string>
+    <string name="buttonCreate">Create</string>
+    <string name="buttonRemove">Remove</string>
+    <string name="buttonUpdate">Update</string>
+
+
+    <!-- Strings Exceptions -->
+    <string name="exceptionEmptyFileds">Can\'t Be Empty</string>
+    <string name="exceptionInvalidValue">Invalid Value</string>
+
 
 </resources>

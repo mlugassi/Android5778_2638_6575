@@ -1,11 +1,27 @@
 package lugassi.wallach.android5778_2638_6575.model.entities;
 
 public class Car {
+    private static int carIDSerializer = 1;
     private int reservations;
     private int branchID;
     private int modelCode;
     private long mileage;
     private int carID;
+
+    public Car() {
+        this.carID = carIDSerializer++;
+        this.reservations = 0;
+        this.mileage = 0;
+    }
+    public Car(int carID , int reservations , long mileage) {
+        this.carID = carID;
+        this.reservations = reservations;
+        this.mileage = mileage;
+    }
+
+    public static int getCarIDSerializer() {
+        return carIDSerializer;
+    }
 
     public int getReservations() {
         return reservations;
@@ -15,12 +31,12 @@ public class Car {
         this.reservations = reservations;
     }
 
-    public int getBranchID() {
-        return branchID;
-    }
-
     public void setBranchID(int branchID) {
         this.branchID = branchID;
+    }
+
+    public int getBranchID() {
+        return branchID;
     }
 
     public int getModelCode() {

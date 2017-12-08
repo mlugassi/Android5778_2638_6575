@@ -73,25 +73,37 @@ public class CarRentConst {
     }
 
     public static CarModel contentValuesToCarModel(ContentValues contentValues) {
-        CarModel carModel = new CarModel();
+        CarModel carModel = null;
+        try{
+            int modelCode = contentValues.getAsInteger(CarModelConst.MODEL_CODE);
+            carModel = new CarModel(modelCode);
+        }
+        catch (Exception ex)
+        {
+            carModel = new CarModel();
+        }
         carModel.setCarType(CarType.valueOf(contentValues.getAsString(CarModelConst.CAR_TYPE)));
         carModel.setCompany(Company.valueOf(contentValues.getAsString(CarModelConst.COMPANY)));
         carModel.setEngineCapacity(EngineCapacity.valueOf(contentValues.getAsString(CarModelConst.ENGINE_CAPACITY)));
         carModel.setMaxGasTank(contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
         carModel.setModelName(contentValues.getAsString(CarModelConst.MODEL_NAME));
         carModel.setSeats(contentValues.getAsInteger(CarModelConst.SEATS));
-        carModel.setModelCode(contentValues.getAsInteger(CarModelConst.MODEL_CODE));
         //  carModel.setColor();
         return carModel;
     }
 
     public static Car contentValuesCar(ContentValues contentValues) {
-        Car car = new Car();
+        Car car = null;
+        try {
+            int carID = contentValues.getAsInteger(CarConst.CAR_ID);
+            int reservations = contentValues.getAsInteger(CarConst.RESERVATIONS);
+            long mileage = contentValues.getAsLong(CarConst.MILEAGE);
+            car = new Car(carID, reservations, mileage);
+        } catch (Exception ex) {
+            car = new Car();
+        }
         car.setBranchID(contentValues.getAsInteger(CarConst.BRANCH_ID));
-        car.setCarID(contentValues.getAsInteger(CarConst.CAR_ID));
-        car.setMileage(contentValues.getAsLong(CarConst.MILEAGE));
         car.setModelCode(contentValues.getAsInteger(CarConst.MODEL_CODE));
-        car.setReservations(contentValues.getAsInteger(CarConst.RESERVATIONS));
         return car;
     }
 
@@ -110,13 +122,21 @@ public class CarRentConst {
     }
 
     public static Branch contentValuesBranch(ContentValues contentValues) {
-        Branch branch = new Branch();
-        branch.setActualParkingSpace(contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
+
+        Branch branch = null;
+        try {
+            int branchID = contentValues.getAsInteger(BranchConst.BRANCH_ID);
+            int actualParkingSpace = contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE);
+            branch = new Branch(branchID, actualParkingSpace);
+
+        } catch (Exception ex) {
+            branch = new Branch();
+        }
         branch.setAddress(contentValues.getAsString(BranchConst.ADDRESS));
         branch.setMaxParkingSpace(contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
         branch.setCity(contentValues.getAsString(BranchConst.CITY));
         branch.setBranchName(contentValues.getAsString(BranchConst.BRANCH_NAME));
-       // branch.setBranchID(contentValues.getAsInteger(BranchConst.BRANCH_ID));
+
         return branch;
     }
 
@@ -185,14 +205,14 @@ public class CarRentConst {
     public static ContentValues customerToContentValues(Customer customer) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(CustomerConst.CREDIT_CARD , customer.getCreditCard());
-        contentValues.put(CustomerConst.CUSTOMER_ID , customer.getCustomerID());
-        contentValues.put(CustomerConst.EMAIL , customer.getEmail());
-        contentValues.put(CustomerConst.FAMILY_NAME , customer.getFamilyName());
-        contentValues.put(CustomerConst.FIRST_NAME , customer.getFirstName());
-        contentValues.put(CustomerConst.GENDER , customer.getGender().name());
-        contentValues.put(CustomerConst.NUM_ACCIDENTS , customer.getNumAccidents());
-        contentValues.put(CustomerConst.PHONE , customer.getPhone());
+        contentValues.put(CustomerConst.CREDIT_CARD, customer.getCreditCard());
+        contentValues.put(CustomerConst.CUSTOMER_ID, customer.getCustomerID());
+        contentValues.put(CustomerConst.EMAIL, customer.getEmail());
+        contentValues.put(CustomerConst.FAMILY_NAME, customer.getFamilyName());
+        contentValues.put(CustomerConst.FIRST_NAME, customer.getFirstName());
+        contentValues.put(CustomerConst.GENDER, customer.getGender().name());
+        contentValues.put(CustomerConst.NUM_ACCIDENTS, customer.getNumAccidents());
+        contentValues.put(CustomerConst.PHONE, customer.getPhone());
         // customer.setBirthDay(Calendar);
 
         return contentValues;
@@ -201,9 +221,9 @@ public class CarRentConst {
     public static ContentValues promotionToContentValues(Promotion promotion) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(PromotionConst.CUSTOMER_ID , promotion.getCustomerID());
-        contentValues.put(PromotionConst.TOTAL_RENT_DAYS , promotion.getTotalRentDays());
-        contentValues.put(PromotionConst.IS_USED , promotion.isUsed());
+        contentValues.put(PromotionConst.CUSTOMER_ID, promotion.getCustomerID());
+        contentValues.put(PromotionConst.TOTAL_RENT_DAYS, promotion.getTotalRentDays());
+        contentValues.put(PromotionConst.IS_USED, promotion.isUsed());
 
         return contentValues;
     }
@@ -211,15 +231,15 @@ public class CarRentConst {
     public static ContentValues reservationToContentValues(Reservation reservation) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(ReservationConst.RESERVATION_ID ,reservation.getReservationID());
-        contentValues.put(ReservationConst.CUSTOMER_ID ,reservation.getCustomerID());
-        contentValues.put(ReservationConst.BEGIN_MILEAGE ,reservation.getBeginMileage());
-        contentValues.put(ReservationConst.CAR_ID ,reservation.getCarID());
-        contentValues.put(ReservationConst.FINISH_MILEAGE ,reservation.getFinishMileage());
-        contentValues.put(ReservationConst.GAS_FILLED ,reservation.getGasFilled());
-        contentValues.put(ReservationConst.IS_GAS_FULL ,reservation.isGasFull());
-        contentValues.put(ReservationConst.IS_OPEN ,reservation.isOpen());
-        contentValues.put(ReservationConst.RESERVATION_COST ,reservation.getReservationCost());
+        contentValues.put(ReservationConst.RESERVATION_ID, reservation.getReservationID());
+        contentValues.put(ReservationConst.CUSTOMER_ID, reservation.getCustomerID());
+        contentValues.put(ReservationConst.BEGIN_MILEAGE, reservation.getBeginMileage());
+        contentValues.put(ReservationConst.CAR_ID, reservation.getCarID());
+        contentValues.put(ReservationConst.FINISH_MILEAGE, reservation.getFinishMileage());
+        contentValues.put(ReservationConst.GAS_FILLED, reservation.getGasFilled());
+        contentValues.put(ReservationConst.IS_GAS_FULL, reservation.isGasFull());
+        contentValues.put(ReservationConst.IS_OPEN, reservation.isOpen());
+        contentValues.put(ReservationConst.RESERVATION_COST, reservation.getReservationCost());
 //        reservation.setStartDate();
 //        reservation.setReturnDate();
 //        reservation.setEndDate();

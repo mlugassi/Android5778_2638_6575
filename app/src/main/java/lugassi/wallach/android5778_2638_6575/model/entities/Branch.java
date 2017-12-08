@@ -16,7 +16,13 @@ public class Branch {
 
     public Branch()
     {
-        branchID = branchIDSerializer++;
+        this.branchID = branchIDSerializer++;
+        this.actualParkingSpace = 0;
+    }
+    public Branch(int branchID , int actualParkingSpace)
+    {
+        this.branchID = branchID;
+        this.actualParkingSpace = actualParkingSpace;
     }
     public String getAddress() {
         return address;

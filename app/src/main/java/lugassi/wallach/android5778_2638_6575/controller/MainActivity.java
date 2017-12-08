@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import lugassi.wallach.android5778_2638_6575.R;
-import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
+import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
+import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 
 public class MainActivity extends Activity {
 
@@ -58,18 +59,18 @@ public class MainActivity extends Activity {
             }
         });
 
-//        addCarActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-//        addCarModelActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
+        addCarActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this , AddCar.class ));
+            }
+        });
+        addCarModelActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this , AddCarModel.class));
+            }
+        });
      //   addCustomerActivityButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -91,13 +92,13 @@ public class MainActivity extends Activity {
         showBranchActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , Branches.class));
+                startActivity(new Intent(MainActivity.this , DataLists.class));
             }
         });
         showCarActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , Cars.class));
+                startActivity(new Intent(MainActivity.this , DataLists.class));
             }
         });
     //    showCarModelActivityButton.setOnClickListener(new View.OnClickListener() {

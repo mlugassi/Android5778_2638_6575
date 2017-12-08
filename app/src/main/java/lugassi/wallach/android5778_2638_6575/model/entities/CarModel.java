@@ -3,6 +3,7 @@ package lugassi.wallach.android5778_2638_6575.model.entities;
 import android.graphics.Color;
 
 public class CarModel {
+    private static int modelCodeSerializer = 1;
     private int modelCode;
     private String modelName;
     private Company company;
@@ -12,6 +13,13 @@ public class CarModel {
     private Color color;
     private int maxGasTank;
 
+    public CarModel() {
+        this.modelCode = modelCodeSerializer++;
+    }
+
+    public CarModel(int modelCode) {
+        this.modelCode = modelCode;
+    }
 
     public int getModelCode() {
         return modelCode;
