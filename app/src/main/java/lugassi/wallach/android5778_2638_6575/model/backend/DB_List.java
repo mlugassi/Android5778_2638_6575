@@ -82,7 +82,7 @@ public class DB_List implements DB_manager {
     @Override
     public boolean updateCarModel(int modelCode, ContentValues contentValues) {
         CarModel carModel = CarRentConst.contentValuesToCarModel(contentValues);
-        carModel.setModelCode(modelCode);
+  //      carModel.setModelCode(modelCode);
         for (int i = 0; i < ListsDataSource.carModelsList.size(); i++)
             if (ListsDataSource.carModelsList.get(i).getModelCode() == modelCode) {
                 ListsDataSource.carModelsList.set(i,carModel);
@@ -94,7 +94,7 @@ public class DB_List implements DB_manager {
     @Override
     public boolean updateCar(int carID, ContentValues contentValues) {
         Car car = CarRentConst.contentValuesCar(contentValues);
-        car.setCarID(carID);
+      //  car.setCarID(carID);
         for (int i = 0; i < ListsDataSource.carsList.size(); i++)
             if (ListsDataSource.carsList.get(i).getModelCode() == carID) {
                 ListsDataSource.carsList.set(i,car);

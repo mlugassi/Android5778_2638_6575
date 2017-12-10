@@ -15,11 +15,28 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings Data -->
+    <string name="dataBranches">Branches</string>
+    <string name="dataCars">Cars</string>
+    <string name="dataCarModels">CarModels</string>
+
     <!-- Strings Texts -->
 
     <string name="textChooseDataList">Choose Data List To View And Edit:</string>
     <string name="textName">Name: </string>
     <string name="textID">ID : </string>
+    <string name="textDialogTitle">Edit Item</string>
+    <string name="textDialogMessage">Choose To Update Or Remove Item</string>
+    <string name="textSuccessAddBranchMessage">Add Branch Id: </string>
+    <string name="textSuccessUpdateBranchMessage">Update Branch</string>
+    <string name="textSuccessCreateCarMessage">Create Car Id: </string>
+    <string name="textSuccessUpdateCarMessage">Update Car</string>
+    <string name="textSuccessAddCarModelMessage">Add Car Model Id: </string>
+    <string name="textSuccessUpdateCarModelMessage">Update Car Model</string>
+    <string name="textFiledAddMessage">Add failed!</string>
+    <string name="textFiledCreateMessage">Create failed!</string>
+    <string name="textFailedUpdateMessage">Update failed!</string>
 
     <!-- Strings Hints -->
 
@@ -35,6 +52,11 @@
     <string name="buttonCreate">Create</string>
     <string name="buttonRemove">Remove</string>
     <string name="buttonUpdate">Update</string>
+    <string name="buttonAddBranch">Add Branch</string>
+    <string name="buttonAddCar">Add Car</string>
+    <string name="buttonAddCArModel">Add Car Model</string>
+    <string name="buttonShowLists">Show Lists</string>
+
 
 
     <!-- Strings Exceptions -->

@@ -11,6 +11,8 @@ import lugassi.wallach.android5778_2638_6575.model.entities.*;
 
 public class CarRentConst {
 
+    public static final String POSITION = "position";
+
     public static class CarConst {
         public static final String RESERVATIONS = "reservations";
         public static final String BRANCH_ID = "branchID";

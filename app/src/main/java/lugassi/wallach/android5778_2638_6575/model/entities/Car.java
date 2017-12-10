@@ -13,7 +13,8 @@ public class Car {
         this.reservations = 0;
         this.mileage = 0;
     }
-    public Car(int carID , int reservations , long mileage) {
+
+    public Car(int carID, int reservations, long mileage) {
         this.carID = carID;
         this.reservations = reservations;
         this.mileage = mileage;
@@ -57,9 +58,5 @@ public class Car {
 
     public int getCarID() {
         return carID;
-    }
-
-    public void setCarID(int carID) {
-        this.carID = carID;
     }
 }

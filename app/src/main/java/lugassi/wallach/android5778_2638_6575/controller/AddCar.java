@@ -19,6 +19,7 @@ import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
 import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
+import lugassi.wallach.android5778_2638_6575.model.entities.Car;
 import lugassi.wallach.android5778_2638_6575.model.entities.CarModel;
 
 public class AddCar extends Activity implements View.OnClickListener {
@@ -28,7 +29,9 @@ public class AddCar extends Activity implements View.OnClickListener {
     private ArrayList<CarModel> carModels;
     private Spinner branchesSpinner;
     private Spinner carModelsSpinner;
-    private Button createButton;
+    private Button button;
+    private Car car;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,8 @@ public class AddCar extends Activity implements View.OnClickListener {
         db_manager = DBManagerFactory.getManager();
         branches = db_manager.getBranches();
         carModels = db_manager.getCarModels();
-
         findViews();
-
+        setCarValues();
     }
 
     private void resetEditText() {
@@ -48,21 +50,65 @@ public class AddCar extends Activity implements View.OnClickListener {
         carModelsSpinner.setSelection(-1);
     }
 
+    void setCarValues() {
+        position = getIntent().getIntExtra(CarRentConst.POSITION, -1);
+        if (position >= 0) {
+            car = db_manager.getCars().get(position);
+            //  branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
+            // carModelsSpinner.setSelection(car.getModelCode());
+            button.setText(getString(R.string.buttonUpdate));
+        }
+    }
+
+    private void updateCar() {
+        final ContentValues contentValues = new ContentValues();
+        try {
+            contentValues.put(CarRentConst.CarConst.CAR_ID, car.getCarID());
+            contentValues.put(CarRentConst.CarConst.MILEAGE, car.getMileage());
+            contentValues.put(CarRentConst.CarConst.RESERVATIONS, car.getReservations());
+            contentValues.put(CarRentConst.CarConst.BRANCH_ID, ((Branch) branchesSpinner.getSelectedItem()).getBranchID());
+            contentValues.put(CarRentConst.CarConst.MODEL_CODE, ((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
+
+            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null) {
+                throw new Exception(getString(R.string.exceptionEmptyFileds));
+            }
+            new AsyncTask<Object, Object, Boolean>() {
+                @Override
+                protected void onPostExecute(Boolean idResult) {
+                    super.onPostExecute(idResult);
+                    if (idResult)
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                protected Boolean doInBackground(Object... params) {
+                    return db_manager.updateCar(car.getCarID(), contentValues);
+                }
+            }.execute();
+
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void addCar() {
         final ContentValues contentValues = new ContentValues();
         try {
-            contentValues.put(CarRentConst.CarConst.BRANCH_ID,((Branch)branchesSpinner.getSelectedItem()).getBranchID());
-            contentValues.put(CarRentConst.CarConst.MODEL_CODE, ((CarModel)carModelsSpinner.getSelectedItem()).getModelCode());
+            contentValues.put(CarRentConst.CarConst.BRANCH_ID, ((Branch) branchesSpinner.getSelectedItem()).getBranchID());
+            contentValues.put(CarRentConst.CarConst.MODEL_CODE, ((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
 
-            if(branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null ) {
-                throw new Exception(String.valueOf(R.string.exceptionEmptyFileds));
+            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null) {
+                throw new Exception(getString(R.string.exceptionEmptyFileds));
             }
             new AsyncTask<Object, Object, Integer>() {
                 @Override
                 protected void onPostExecute(Integer idResult) {
                     super.onPostExecute(idResult);
                     resetEditText();
-                    Toast.makeText(getBaseContext(), "Create Car id: " + idResult, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + idResult, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -72,15 +118,16 @@ public class AddCar extends Activity implements View.OnClickListener {
             }.execute();
 
         } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Create failed!\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
     private void findViews() {
         branchesSpinner = (Spinner) findViewById(R.id.branchesSpinner);
         carModelsSpinner = (Spinner) findViewById(R.id.carModelsSpinner);
-        createButton = (Button) findViewById(R.id.createButton);
+        button = (Button) findViewById(R.id.createButton);
 
-        createButton.setOnClickListener(this);
+        button.setOnClickListener(this);
         carModelsSpinner.setAdapter(new ArrayAdapter<CarModel>(this, R.layout.item_list_view, carModels) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -97,6 +144,7 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 return convertView;
             }
+
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -132,6 +180,7 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 return convertView;
             }
+
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -155,8 +204,9 @@ public class AddCar extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == createButton) {
-            addCar();
+        if (v == button) {
+            if (position == -1) addCar();
+            else updateCar();
         }
     }
 

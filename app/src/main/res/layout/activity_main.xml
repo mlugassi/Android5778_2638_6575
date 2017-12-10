@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="lugassi.wallach.android5778_2638_6575.controller.MainActivity">
+    tools:context="lugassi.wallach.android5778_2638_6575.controller.MainActivity"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,64 +17,24 @@
                 android:id="@+id/add_branch_activity_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add branch" />
-            <Button
-                android:id="@+id/add_car_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="add car" />
+                android:text="@string/buttonAddBranch" />
             <Button
                 android:id="@+id/add_carModel_activity_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add carModel" />
+                android:text="@string/buttonAddCArModel" />
             <Button
-                android:id="@+id/add_customer_activity_button"
+                android:id="@+id/add_car_activity_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add customer" />
-            <Button
-                android:id="@+id/add_promotion_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="add promotion" />
-            <Button
-                android:id="@+id/add_reservation_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="add reservation" />
+                android:text="@string/buttonAddCar" />
+
 
             <Button
                 android:id="@+id/show_branch_activity_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="show branch" />
-            <Button
-                android:id="@+id/show_car_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="show car" />
-            <Button
-                android:id="@+id/show_carModel_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="show carModel" />
-            <Button
-                android:id="@+id/show_customer_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="show customer" />
-            <Button
-                android:id="@+id/show_promotion_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="show promotion" />
-            <Button
-                android:id="@+id/show_reservation_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="show reservation" />
-
+                android:text="@string/buttonShowLists" />
 
         </LinearLayout>
 

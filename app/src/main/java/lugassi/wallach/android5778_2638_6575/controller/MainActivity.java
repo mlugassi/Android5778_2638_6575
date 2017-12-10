@@ -9,6 +9,13 @@ import android.widget.Button;
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
+import lugassi.wallach.android5778_2638_6575.model.datasource.ListsDataSource;
+import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
+import lugassi.wallach.android5778_2638_6575.model.entities.Car;
+import lugassi.wallach.android5778_2638_6575.model.entities.CarModel;
+import lugassi.wallach.android5778_2638_6575.model.entities.CarType;
+import lugassi.wallach.android5778_2638_6575.model.entities.Company;
+import lugassi.wallach.android5778_2638_6575.model.entities.EngineCapacity;
 
 public class MainActivity extends Activity {
 
@@ -17,40 +24,52 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
+//        Branch branch;
+//        Car car;
+//        CarModel carModel;
+//        DB_manager db_manager = DBManagerFactory.getManager();
+//
+//        for(Integer  i = 0; i < 10 ; i++)
+//        {
+//            branch = new Branch();
+//            carModel = new CarModel();
+//            car = new Car();
+//
+//            branch.setActualParkingSpace(i);
+//            branch.setCity(i.toString());
+//            branch.setBranchName(i.toString());
+//            branch.setMaxParkingSpace(i);
+//            branch.setAddress(i.toString());
+//
+//            carModel.setCompany(Company.BMW);
+//            carModel.setModelCode(i);
+//            carModel.setCarType(CarType.Manual);
+//            carModel.setMaxGasTank(i);
+//            carModel.setEngineCapacity(EngineCapacity._1000);
+//            carModel.setSeats(i);
+//
+//            car.setModelCode(i);
+//            car.setBranchID(i);
+//            car.setMileage(i);
+//            car.setReservations(i);
+//
+//            db_manager.getBranches().add(branch);
+//            db_manager.getCarModels().add(carModel);
+//            db_manager.getCars().add(car);
+//        }
+
     }
 
     private Button addBranchActivityButton;
     private Button addCarActivityButton;
     private Button addCarModelActivityButton;
-    private Button addCustomerActivityButton;
-    private Button addPromotionActivityButton;
-    private Button addReservationActivityButton;
     private Button showBranchActivityButton;
-    private Button showCarActivityButton;
-    private Button showCarModelActivityButton;
-    private Button showCustomerActivityButton;
-    private Button showPromotionActivityButton;
-    private Button showReservationActivityButton;
 
-    /**
-     * Find the Views in the layout<br />
-     * <br />
-     * Auto-created on 2017-12-03 21:49:35 by Android Layout Finder
-     * (http://www.buzzingandroid.com/tools/android-layout-finder)
-     */
     private void findViews() {
         addBranchActivityButton = (Button) findViewById(R.id.add_branch_activity_button);
         addCarActivityButton = (Button) findViewById(R.id.add_car_activity_button);
         addCarModelActivityButton = (Button) findViewById(R.id.add_carModel_activity_button);
-        addCustomerActivityButton = (Button) findViewById(R.id.add_customer_activity_button);
-        addPromotionActivityButton = (Button) findViewById(R.id.add_promotion_activity_button);
-        addReservationActivityButton = (Button) findViewById(R.id.add_reservation_activity_button);
         showBranchActivityButton = (Button) findViewById(R.id.show_branch_activity_button);
-        showCarActivityButton = (Button) findViewById(R.id.show_car_activity_button);
-        showCarModelActivityButton = (Button) findViewById(R.id.show_carModel_activity_button);
-        showCustomerActivityButton = (Button) findViewById(R.id.show_customer_activity_button);
-        showPromotionActivityButton = (Button) findViewById(R.id.show_promotion_activity_button);
-        showReservationActivityButton = (Button) findViewById(R.id.show_reservation_activity_button);
 
         addBranchActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,60 +90,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this , AddCarModel.class));
             }
         });
-     //   addCustomerActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-    //    addPromotionActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-     //   addReservationActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
         showBranchActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this , DataLists.class));
             }
         });
-        showCarActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , DataLists.class));
-            }
-        });
-    //    showCarModelActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-    //    showCustomerActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-     //   showPromotionActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
-      //  showReservationActivityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this , ));
-//            }
-//        });
     }
 }
 
