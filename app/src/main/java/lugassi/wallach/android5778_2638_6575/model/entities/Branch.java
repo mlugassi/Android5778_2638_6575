@@ -2,7 +2,7 @@ package lugassi.wallach.android5778_2638_6575.model.entities;
 
 public class Branch {
 
-    private static  int branchIDSerializer = 1;
+    private static int branchIDSerializer = 1;
     private String address;
     // might be final, waiting for constructor
     private int maxParkingSpace;
@@ -14,16 +14,15 @@ public class Branch {
     // the neighborhood, by default the city name
     private String branchName;
 
-    public Branch()
-    {
+    public Branch(int branchID) {
+        this.branchID = branchID;
+    }
+
+    public Branch() {
         this.branchID = branchIDSerializer++;
         this.actualParkingSpace = 0;
     }
-    public Branch(int branchID , int actualParkingSpace)
-    {
-        this.branchID = branchID;
-        this.actualParkingSpace = actualParkingSpace;
-    }
+
     public String getAddress() {
         return address;
     }

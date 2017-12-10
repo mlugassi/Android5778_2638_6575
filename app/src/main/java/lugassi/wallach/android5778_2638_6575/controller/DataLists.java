@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import lugassi.wallach.android5778_2638_6575.R;
+import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_List;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
@@ -28,7 +29,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     DB_manager db_manager;
     private ListView dataListView;
     private Spinner dataSpinner;
-    private String data[] = {"Branches" , "Cars" , "Car Models"};
+    private String data[] = {"Branches", "Cars", "Car Models"};
     private MyListAdapter branchesAdapter;
     private MyListAdapter carsAdapter;
     private MyListAdapter carModelsAdapter;
@@ -38,7 +39,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_lists);
-        db_manager = new DB_List();
+        db_manager = DBManagerFactory.getManager();
         branchesAdapter = new MyListAdapter(DataLists.this, db_manager.getBranches()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {

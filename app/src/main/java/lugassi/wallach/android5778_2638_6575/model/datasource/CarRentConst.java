@@ -76,12 +76,10 @@ public class CarRentConst {
 
     public static CarModel contentValuesToCarModel(ContentValues contentValues) {
         CarModel carModel = null;
-        try{
+        try {
             int modelCode = contentValues.getAsInteger(CarModelConst.MODEL_CODE);
             carModel = new CarModel(modelCode);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             carModel = new CarModel();
         }
         carModel.setCarType(CarType.valueOf(contentValues.getAsString(CarModelConst.CAR_TYPE)));
@@ -125,19 +123,12 @@ public class CarRentConst {
 
     public static Branch contentValuesBranch(ContentValues contentValues) {
 
-        Branch branch = null;
-        try {
-            int branchID = contentValues.getAsInteger(BranchConst.BRANCH_ID);
-            int actualParkingSpace = contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE);
-            branch = new Branch(branchID, actualParkingSpace);
-
-        } catch (Exception ex) {
-            branch = new Branch();
-        }
+        Branch branch = new Branch(contentValues.getAsInteger(BranchConst.BRANCH_ID));
         branch.setAddress(contentValues.getAsString(BranchConst.ADDRESS));
         branch.setMaxParkingSpace(contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
         branch.setCity(contentValues.getAsString(BranchConst.CITY));
         branch.setBranchName(contentValues.getAsString(BranchConst.BRANCH_NAME));
+        branch.setActualParkingSpace(contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
 
         return branch;
     }
@@ -198,7 +189,7 @@ public class CarRentConst {
         contentValues.put(CarModelConst.ENGINE_CAPACITY, carModel.getEngineCapacity().name());
         contentValues.put(CarModelConst.SEATS, carModel.getSeats());
         contentValues.put(CarModelConst.CAR_TYPE, carModel.getCarType().name());
-        contentValues.put(CarModelConst.COLOR, carModel.getColor().toString());
+        //contentValues.put(CarModelConst.COLOR, carModel.getColor().toString());
         contentValues.put(CarModelConst.MAX_GAS_TANK, carModel.getMaxGasTank());
 
         return contentValues;

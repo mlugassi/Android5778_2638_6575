@@ -10,7 +10,7 @@ public class CarModel {
     private EngineCapacity engineCapacity;
     private int seats;
     private CarType carType;
-    private Color color;
+   // private Color color;
     private int maxGasTank;
 
     public CarModel() {
@@ -68,14 +68,14 @@ public class CarModel {
     public void setCarType(CarType carType) {
         this.carType = carType;
     }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
+//
+//    public Color getColor() {
+//        return color;
+//    }
+//
+//    public void setColor(Color color) {
+//        this.color = color;
+//    }
 
     public int getMaxGasTank() {
         return maxGasTank;

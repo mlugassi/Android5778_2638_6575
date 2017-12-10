@@ -11,9 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import lugassi.wallach.android5778_2638_6575.R;
-import lugassi.wallach.android5778_2638_6575.model.backend.DB_List;
+import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
+import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst.BranchConst;
 import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
 
 public class AddBranch extends Activity implements View.OnClickListener {
@@ -31,7 +32,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_branch);
-        db_manager = new DB_List();
+        db_manager = DBManagerFactory.getManager();
         findViews();
         setBranchValues();
     }
@@ -86,17 +87,15 @@ public class AddBranch extends Activity implements View.OnClickListener {
     }
 
     private void updateBranch() {
-        final ContentValues contentValues = new ContentValues();
         try {
             if (!checkValues())
                 return;
-            contentValues.put(CarRentConst.BranchConst.BRANCH_ID, branch.getBranchID());
-            contentValues.put(CarRentConst.BranchConst.ACTUAL_PARKING_SPACE, branch.getActualParkingSpace());
-            contentValues.put(CarRentConst.BranchConst.BRANCH_NAME, nameEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.ADDRESS, addressEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.CITY, cityEditText.getText().toString());
             int maxParkingSpace = Integer.parseInt(parkingSpaceEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.MAX_PARKING_SPACE, maxParkingSpace);
+
+            branch.setAddress(addressEditText.getText().toString());
+            branch.setMaxParkingSpace(maxParkingSpace);
+            branch.setCity(cityEditText.getText().toString());
+            branch.setBranchName(nameEditText.getText().toString());
 
             new AsyncTask<Object, Object, Boolean>() {
                 @Override
@@ -106,12 +105,11 @@ public class AddBranch extends Activity implements View.OnClickListener {
                         Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-
                 }
 
                 @Override
                 protected Boolean doInBackground(Object... params) {
-                    return db_manager.updateBranch(branch.getBranchID(), contentValues);
+                    return db_manager.updateBranch(branch.getBranchID(), CarRentConst.branchToContentValues(branch));
                 }
             }.execute();
 
@@ -121,15 +119,16 @@ public class AddBranch extends Activity implements View.OnClickListener {
     }
 
     private void addBranch() {
-        final ContentValues contentValues = new ContentValues();
         try {
             if (!checkValues())
                 return;
-            contentValues.put(CarRentConst.BranchConst.BRANCH_NAME, nameEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.ADDRESS, addressEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.CITY, cityEditText.getText().toString());
             int maxParkingSpace = Integer.parseInt(parkingSpaceEditText.getText().toString());
-            contentValues.put(CarRentConst.BranchConst.MAX_PARKING_SPACE, maxParkingSpace);
+
+            final Branch branch = new Branch();
+            branch.setAddress(addressEditText.getText().toString());
+            branch.setMaxParkingSpace(maxParkingSpace);
+            branch.setCity(cityEditText.getText().toString());
+            branch.setBranchName(nameEditText.getText().toString());
 
             new AsyncTask<Object, Object, Integer>() {
                 @Override
@@ -141,7 +140,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
 
                 @Override
                 protected Integer doInBackground(Object... params) {
-                    return db_manager.addBranch(contentValues);
+                    return db_manager.addBranch(CarRentConst.branchToContentValues(branch));
                 }
             }.execute();
 
