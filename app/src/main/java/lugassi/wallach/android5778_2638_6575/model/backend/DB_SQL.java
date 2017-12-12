@@ -34,7 +34,28 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public int addCarModel(ContentValues contentValues) {
-        return 0;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarModelConst.MODEL_CODE, contentValues.getAsInteger(CarModelConst.MODEL_CODE));
+            params.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
+            params.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
+            params.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
+            params.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
+            params.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
+            params.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
+
+            String results = POST(url + "CarModel/AddCarModel.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return contentValues.getAsInteger(CarModelConst.MODEL_CODE);
     }
 
     @Override
@@ -48,18 +69,18 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
-    public int addBranch(ContentValues branch) {
+    public int addBranch(ContentValues contentValues) {
         try {
             Map<String, Object> params = new LinkedHashMap<>();
 
-            params.put(BranchConst.BRANCH_ID, branch.getAsInteger(BranchConst.BRANCH_ID));
-            params.put(BranchConst.BRANCH_NAME, branch.getAsString(BranchConst.BRANCH_NAME));
-            params.put(BranchConst.ADDRESS, branch.getAsString(BranchConst.ADDRESS));
-            params.put(BranchConst.CITY, branch.getAsString(BranchConst.CITY));
-            params.put(BranchConst.MAX_PARKING_SPACE, branch.getAsInteger(BranchConst.MAX_PARKING_SPACE));
+            params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
+            params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
+            params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
+            params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
+            params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
             params.put(BranchConst.ACTUAL_PARKING_SPACE, 0);
 
-            String results = POST(url + "AddBranch.php", params);
+            String results = POST(url + "Branch/AddBranch.php", params);
             if (results.equals("")) {
                 throw new Exception("An error occurred on the server's side");
             }
@@ -69,7 +90,7 @@ public class DB_SQL implements DB_manager {
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        return branch.getAsInteger(BranchConst.BRANCH_ID);
+        return contentValues.getAsInteger(BranchConst.BRANCH_ID);
     }
 
     @Override
@@ -84,7 +105,28 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public boolean updateCarModel(int modelCode, ContentValues contentValues) {
-        return false;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarModelConst.MODEL_CODE, modelCode);
+            params.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
+            params.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
+            params.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
+            params.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
+            params.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
+            params.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
+
+            String results = POST(url + "CarModel/UpdateCarModel.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
     }
 
     @Override
@@ -102,14 +144,14 @@ public class DB_SQL implements DB_manager {
         try {
             Map<String, Object> params = new LinkedHashMap<>();
 
-            params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
+            params.put(BranchConst.BRANCH_ID, branchID);
             params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
             params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
             params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
             params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
             params.put(BranchConst.ACTUAL_PARKING_SPACE, contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
 
-            String results = POST(url + "UpdateBranch.php", params);
+            String results = POST(url + "Branch/UpdateBranch.php", params);
             if (results.equals("")) {
                 throw new Exception("An error occurred on the server's side");
             }
@@ -134,8 +176,40 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public boolean removeCarModel(int modelCode) {
-        return false;
-    }
+        try {
+            return new AsyncTask<Integer, Object, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Integer... params) {
+                    try {
+                        Map<String, Object> myParams = new LinkedHashMap<>();
+                        int modelCode = params[0];
+
+                        myParams.put(CarModelConst.MODEL_CODE, modelCode);
+
+                        String results = POST(url + "CarModel/RemoveCarModel.php", myParams);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(modelCode).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;    }
 
     @Override
     public boolean removeCar(int carID) {
@@ -159,7 +233,7 @@ public class DB_SQL implements DB_manager {
 
                         myParams.put(BranchConst.BRANCH_ID, branchID);
 
-                        String results = POST(url + "DeleteBranch.php", myParams);
+                        String results = POST(url + "Branch/RemoveBranch.php", myParams);
                         if (results.equals("")) {
                             throw new Exception("An error occurred on the server's side");
                         }
@@ -200,7 +274,7 @@ public class DB_SQL implements DB_manager {
 
         ArrayList<Branch> branches = new ArrayList<Branch>();
         try {
-            JSONArray array = new JSONObject(GET(url + "GetBranches.php")).getJSONArray("branches");
+            JSONArray array = new JSONObject(GET(url + "Branch/GetBranches.php")).getJSONArray("branches");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jsonObject = array.getJSONObject(i);
 
@@ -226,8 +300,26 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public ArrayList<CarModel> getCarModels() {
-        return null;
-    }
+        ArrayList<CarModel> carModels = new ArrayList<CarModel>();
+        try {
+            JSONArray array = new JSONObject(GET(url + "CarModel/GetCarModels.php")).getJSONArray("carModels");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                CarModel carModel = new CarModel(jsonObject.getInt(CarModelConst.MODEL_CODE));
+                carModel.setCompany(Company.valueOf(jsonObject.getString(CarModelConst.COMPANY)));
+                carModel.setSeats(jsonObject.getInt(CarModelConst.SEATS));
+                carModel.setCarType(CarType.valueOf(jsonObject.getString(CarModelConst.CAR_TYPE)));
+                carModel.setEngineCapacity(EngineCapacity.valueOf(jsonObject.getString(CarModelConst.ENGINE_CAPACITY)));
+                carModel.setMaxGasTank(jsonObject.getInt(CarModelConst.MAX_GAS_TANK));
+                carModel.setModelName(jsonObject.getString(CarModelConst.MODEL_NAME));
+
+                carModels.add(carModel);
+            }
+        } catch (Exception e) {
+        }
+
+        return carModels;    }
 
     @Override
     public ArrayList<Customer> getCustomers() {

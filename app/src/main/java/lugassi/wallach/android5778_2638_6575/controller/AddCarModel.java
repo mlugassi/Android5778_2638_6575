@@ -119,19 +119,18 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     }
 
     private void updateCarModel() {
-        final ContentValues contentValues = new ContentValues();
         try {
             if (!checkValues()) return;
-            contentValues.put(CarRentConst.CarModelConst.MODEL_CODE, carModel.getModelCode());
-            contentValues.put(CarRentConst.CarModelConst.MODEL_NAME, nameEditText.getText().toString());
-            contentValues.put(CarRentConst.CarModelConst.COMPANY, ((Company) companySpinner.getSelectedItem()).name());
-            contentValues.put(CarRentConst.CarModelConst.ENGINE_CAPACITY, ((EngineCapacity) engineCapacitySpinner.getSelectedItem()).name());
-            contentValues.put(CarRentConst.CarModelConst.CAR_TYPE, ((CarType) carTypeSpinner.getSelectedItem()).name());
-            //  contentValues.put(CarRentConst.CarModelConst.COLOR, ((Color) colorSpinner.getSelectedItem()).toString());
+
             int seats = Integer.parseInt(seatsEditText.getText().toString());
             int maxGasTank = Integer.parseInt(maxGasEditText.getText().toString());
-            contentValues.put(CarRentConst.CarModelConst.SEATS, seats);
-            contentValues.put(CarRentConst.CarModelConst.MAX_GAS_TANK, maxGasTank);
+
+            carModel.setModelName(nameEditText.getText().toString());
+            carModel.setCompany((Company) companySpinner.getSelectedItem());
+            carModel.setCarType((CarType) carTypeSpinner.getSelectedItem());
+            carModel.setEngineCapacity((EngineCapacity) engineCapacitySpinner.getSelectedItem());
+            carModel.setMaxGasTank(maxGasTank);
+            carModel.setSeats(seats);
 
             new AsyncTask<Object, Object, Boolean>() {
                 @Override
@@ -145,7 +144,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
 
                 @Override
                 protected Boolean doInBackground(Object... params) {
-                    return db_manager.updateCarModel(carModel.getModelCode(), contentValues);
+                    return db_manager.updateCarModel(carModel.getModelCode(), CarRentConst.carModelToContentValues(carModel));
                 }
             }.execute();
 
@@ -155,18 +154,20 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     }
 
     private void addCarModel() {
-        final ContentValues contentValues = new ContentValues();
         try {
             if (!checkValues()) return;
-            contentValues.put(CarRentConst.CarModelConst.MODEL_NAME, nameEditText.getText().toString());
-            contentValues.put(CarRentConst.CarModelConst.COMPANY, ((Company) companySpinner.getSelectedItem()).name());
-            contentValues.put(CarRentConst.CarModelConst.ENGINE_CAPACITY, ((EngineCapacity) engineCapacitySpinner.getSelectedItem()).name());
-            contentValues.put(CarRentConst.CarModelConst.CAR_TYPE, ((CarType) carTypeSpinner.getSelectedItem()).name());
-            //  contentValues.put(CarRentConst.CarModelConst.COLOR, ((Color) colorSpinner.getSelectedItem()).toString());
+
             int seats = Integer.parseInt(seatsEditText.getText().toString());
             int maxGasTank = Integer.parseInt(maxGasEditText.getText().toString());
-            contentValues.put(CarRentConst.CarModelConst.SEATS, seats);
-            contentValues.put(CarRentConst.CarModelConst.MAX_GAS_TANK, maxGasTank);
+
+            final CarModel carModel = new CarModel();
+            carModel.setModelName(nameEditText.getText().toString());
+            carModel.setCompany((Company) companySpinner.getSelectedItem());
+            carModel.setCarType((CarType) carTypeSpinner.getSelectedItem());
+            carModel.setEngineCapacity((EngineCapacity) engineCapacitySpinner.getSelectedItem());
+            carModel.setMaxGasTank(maxGasTank);
+            carModel.setSeats(seats);
+            //  contentValues.put(CarRentConst.CarModelConst.COLOR, ((Color) colorSpinner.getSelectedItem()).toString());
 
             new AsyncTask<Object, Object, Integer>() {
                 @Override
@@ -178,7 +179,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
 
                 @Override
                 protected Integer doInBackground(Object... params) {
-                    return db_manager.addCarModel(contentValues);
+                    return db_manager.addCarModel(CarRentConst.carModelToContentValues(carModel));
                 }
             }.execute();
 
