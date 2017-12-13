@@ -31,6 +31,10 @@ public class Branch {
         return branchIDSerializer;
     }
 
+    public static void setBranchIDSerializer(int branchIDSerializer) {
+        Branch.branchIDSerializer = branchIDSerializer;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }

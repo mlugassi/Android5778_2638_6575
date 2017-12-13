@@ -32,6 +32,23 @@ public class DB_SQL implements DB_manager {
 
     private String url = "http://mlugassi.vlab.jct.ac.il/";
 
+    public DB_SQL() {
+
+        try {
+            String branchResult = GET(url + "Branch/GetSerialNumber.php");
+            String carResult = GET(url + "Car/GetSerialNumber.php");
+            String carModelResult = GET(url + "CarModel/GetSerialNumber.php");
+            Branch.setBranchIDSerializer(Integer.parseInt(branchResult.substring(0,branchResult.length() - 1)));
+            Car.setCarIDSerializer(Integer.parseInt(carResult.substring(0,carResult.length() - 1)));
+            CarModel.setModelCodeSerializer(Integer.parseInt(carModelResult.substring(0,carModelResult.length() - 1)));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public int addCarModel(ContentValues contentValues) {
         try {
@@ -60,7 +77,26 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public int addCar(ContentValues contentValues) {
-        return 0;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarConst.CAR_ID, contentValues.getAsInteger(CarConst.CAR_ID));
+            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            params.put(CarConst.RESERVATIONS, 0);
+            params.put(CarConst.MILEAGE, 0);
+
+            String results = POST(url + "Car/AddCar.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return contentValues.getAsInteger(CarConst.CAR_ID);
     }
 
     @Override
@@ -131,7 +167,26 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public boolean updateCar(int carID, ContentValues contentValues) {
-        return false;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarConst.CAR_ID, carID);
+            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
+            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+
+            String results = POST(url + "Car/UpdateCar.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
     }
 
     @Override
@@ -209,10 +264,44 @@ public class DB_SQL implements DB_manager {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return false;    }
+        return false;
+    }
 
     @Override
     public boolean removeCar(int carID) {
+        try {
+            return new AsyncTask<Integer, Object, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Integer... params) {
+                    try {
+                        Map<String, Object> myParams = new LinkedHashMap<>();
+                        int carID = params[0];
+
+                        myParams.put(CarConst.CAR_ID, carID);
+
+                        String results = POST(url + "Car/RemoveCar.php", myParams);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(carID).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -295,7 +384,24 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public ArrayList<Car> getCars() {
-        return null;
+        ArrayList<Car> cars = new ArrayList<Car>();
+        try {
+            JSONArray array = new JSONObject(GET(url + "Car/GetCars.php")).getJSONArray("cars");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                Car car = new Car(jsonObject.getInt(CarConst.CAR_ID));
+                car.setModelCode(jsonObject.getInt(CarConst.MODEL_CODE));
+                car.setBranchID(jsonObject.getInt(CarConst.BRANCH_ID));
+                car.setReservations(jsonObject.getInt(CarConst.RESERVATIONS));
+                car.setMileage(jsonObject.getInt(CarConst.MILEAGE));
+
+                cars.add(car);
+            }
+        } catch (Exception e) {
+        }
+
+        return cars;
     }
 
     @Override
@@ -319,7 +425,8 @@ public class DB_SQL implements DB_manager {
         } catch (Exception e) {
         }
 
-        return carModels;    }
+        return carModels;
+    }
 
     @Override
     public ArrayList<Customer> getCustomers() {

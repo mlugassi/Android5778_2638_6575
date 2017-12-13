@@ -96,14 +96,14 @@ public class CarRentConst {
         Car car = null;
         try {
             int carID = contentValues.getAsInteger(CarConst.CAR_ID);
-            int reservations = contentValues.getAsInteger(CarConst.RESERVATIONS);
-            long mileage = contentValues.getAsLong(CarConst.MILEAGE);
-            car = new Car(carID, reservations, mileage);
+            car = new Car(carID);
         } catch (Exception ex) {
             car = new Car();
         }
         car.setBranchID(contentValues.getAsInteger(CarConst.BRANCH_ID));
         car.setModelCode(contentValues.getAsInteger(CarConst.MODEL_CODE));
+        car.setMileage(contentValues.getAsLong(CarConst.MILEAGE));
+        car.setReservations(contentValues.getAsInteger(CarConst.RESERVATIONS));
         return car;
     }
 

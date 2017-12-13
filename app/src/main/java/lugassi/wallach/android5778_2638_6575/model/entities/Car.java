@@ -14,14 +14,16 @@ public class Car {
         this.mileage = 0;
     }
 
-    public Car(int carID, int reservations, long mileage) {
+    public Car(int carID) {
         this.carID = carID;
-        this.reservations = reservations;
-        this.mileage = mileage;
     }
 
     public static int getCarIDSerializer() {
         return carIDSerializer;
+    }
+
+    public static void setCarIDSerializer(int carIDSerializer) {
+        Car.carIDSerializer = carIDSerializer;
     }
 
     public int getReservations() {

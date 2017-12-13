@@ -17,16 +17,16 @@ public class CarModel {
         this.modelCode = modelCodeSerializer++;
     }
 
+    public static void setModelCodeSerializer(int modelCodeSerializer) {
+        CarModel.modelCodeSerializer = modelCodeSerializer;
+    }
+
     public CarModel(int modelCode) {
         this.modelCode = modelCode;
     }
 
     public int getModelCode() {
         return modelCode;
-    }
-
-    public void setModelCode(int modelCode) {
-        this.modelCode = modelCode;
     }
 
     public String getModelName() {

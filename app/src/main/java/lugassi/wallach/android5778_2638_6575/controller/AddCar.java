@@ -61,17 +61,13 @@ public class AddCar extends Activity implements View.OnClickListener {
     }
 
     private void updateCar() {
-        final ContentValues contentValues = new ContentValues();
         try {
-            contentValues.put(CarRentConst.CarConst.CAR_ID, car.getCarID());
-            contentValues.put(CarRentConst.CarConst.MILEAGE, car.getMileage());
-            contentValues.put(CarRentConst.CarConst.RESERVATIONS, car.getReservations());
-            contentValues.put(CarRentConst.CarConst.BRANCH_ID, ((Branch) branchesSpinner.getSelectedItem()).getBranchID());
-            contentValues.put(CarRentConst.CarConst.MODEL_CODE, ((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
-
-            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null) {
+            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null)
                 throw new Exception(getString(R.string.exceptionEmptyFileds));
-            }
+
+            car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
+            car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
+
             new AsyncTask<Object, Object, Boolean>() {
                 @Override
                 protected void onPostExecute(Boolean idResult) {
@@ -85,7 +81,7 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 @Override
                 protected Boolean doInBackground(Object... params) {
-                    return db_manager.updateCar(car.getCarID(), contentValues);
+                    return db_manager.updateCar(car.getCarID(), CarRentConst.carToContentValues(car));
                 }
             }.execute();
 
@@ -95,14 +91,14 @@ public class AddCar extends Activity implements View.OnClickListener {
     }
 
     private void addCar() {
-        final ContentValues contentValues = new ContentValues();
         try {
-            contentValues.put(CarRentConst.CarConst.BRANCH_ID, ((Branch) branchesSpinner.getSelectedItem()).getBranchID());
-            contentValues.put(CarRentConst.CarConst.MODEL_CODE, ((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
-
-            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null) {
+            if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null)
                 throw new Exception(getString(R.string.exceptionEmptyFileds));
-            }
+
+            final Car car = new Car();
+            car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
+            car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
+
             new AsyncTask<Object, Object, Integer>() {
                 @Override
                 protected void onPostExecute(Integer idResult) {
@@ -113,7 +109,7 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 @Override
                 protected Integer doInBackground(Object... params) {
-                    return db_manager.addCar(contentValues);
+                    return db_manager.addCar(CarRentConst.carToContentValues(car));
                 }
             }.execute();
 
