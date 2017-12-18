@@ -20,6 +20,16 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Reservation;
 public class DB_List implements DB_manager {
 
     @Override
+    public String checkAdmin(String userName, String password) {
+        return "Success";
+    }
+
+    @Override
+    public Boolean createAdmin(String userName, String password, int userID) {
+        return true;
+    }
+
+    @Override
     public int addCarModel(ContentValues contentValues) {
         CarModel carModel = CarRentConst.contentValuesToCarModel(contentValues);
         // if car model exists in carModelsList don't do anything

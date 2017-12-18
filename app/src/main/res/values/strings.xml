@@ -34,10 +34,11 @@
     <string name="textSuccessUpdateCarMessage">Update Car</string>
     <string name="textSuccessAddCarModelMessage">Add Car Model Id: </string>
     <string name="textSuccessUpdateCarModelMessage">Update Car Model</string>
+    <string name="textSuccessCreateCustomerMessage">Create Customer Id:</string>
     <string name="textFiledAddMessage">Add failed!</string>
     <string name="textFiledCreateMessage">Create failed!</string>
     <string name="textFailedUpdateMessage">Update failed!</string>
-
+    <string name="textLinkSignup">No account yet? Create one</string>
     <!-- Strings Hints -->
 
     <string name="hintName">Name</string>
@@ -46,6 +47,16 @@
     <string name="hintParkingSpace">Parking Space</string>
     <string name="hintSeats">Num of Seats</string>
     <string name="hintMaxGas">Max Gas Tank</string>
+    <string name="hintUserName">User Name</string>
+    <string name="hintPassword">Password</string>
+    <string name="hintConfirmPassword">Confirm Password</string>
+    <string name="hintFirstName">First Name</string>
+    <string name="hintFamilyName">Family Name</string>
+    <string name="hintCustomerID">ID</string>
+    <string name="hintPhone">Phone</string>
+    <string name="hintEmail">Email</string>
+    <string name="hintCreditCard">Credit Card</string>
+    <string name="hintBirthDay">BirthDay</string>
 
     <!-- Strings Buttons -->
     <string name="buttonAdd">Add</string>
@@ -55,13 +66,15 @@
     <string name="buttonAddBranch">Add Branch</string>
     <string name="buttonAddCar">Add Car</string>
     <string name="buttonAddCArModel">Add Car Model</string>
-    <string name="buttonShowLists">Show Lists</string>
-
+    <string name="buttonManage">Manage</string>
+    <string name="buttonSettings">Settings</string>
+    <string name="buttonLogin">Login</string>
 
 
     <!-- Strings Exceptions -->
     <string name="exceptionEmptyFileds">Can\'t Be Empty</string>
     <string name="exceptionInvalidValue">Invalid Value</string>
-
-
+    <string name="exceptionUserName">User Name Must Be Less Than 25 Characters</string>
+    <string name="exceptionPassword">Password Dodn\'t Match</string>
+    <string name="title_activity_add_customer">AddCustomer</string>
 </resources>

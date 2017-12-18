@@ -7,37 +7,4 @@
     tools:context="lugassi.wallach.android5778_2638_6575.controller.MainActivity"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <Button
-                android:id="@+id/add_branch_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddBranch" />
-            <Button
-                android:id="@+id/add_carModel_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddCArModel" />
-            <Button
-                android:id="@+id/add_car_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddCar" />
-
-
-            <Button
-                android:id="@+id/show_branch_activity_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonShowLists" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
 </LinearLayout>

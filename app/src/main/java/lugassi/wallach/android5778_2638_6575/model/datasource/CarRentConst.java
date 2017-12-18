@@ -3,6 +3,8 @@ package lugassi.wallach.android5778_2638_6575.model.datasource;
 import android.content.ContentValues;
 import android.icu.util.Calendar;
 
+import java.text.SimpleDateFormat;
+
 import lugassi.wallach.android5778_2638_6575.model.entities.*;
 
 /**
@@ -12,6 +14,12 @@ import lugassi.wallach.android5778_2638_6575.model.entities.*;
 public class CarRentConst {
 
     public static final String POSITION = "position";
+
+    public static class UserConst {
+        public static final String USER_NAME = "userName";
+        public static final String PASSWORD = "password";
+        public static final String USER_ID = "userID";
+    }
 
     public static class CarConst {
         public static final String RESERVATIONS = "reservations";
@@ -206,7 +214,7 @@ public class CarRentConst {
         contentValues.put(CustomerConst.GENDER, customer.getGender().name());
         contentValues.put(CustomerConst.NUM_ACCIDENTS, customer.getNumAccidents());
         contentValues.put(CustomerConst.PHONE, customer.getPhone());
-        // customer.setBirthDay(Calendar);
+        contentValues.put(CustomerConst.BIRTH_DAY, customer.getBirthDayString() );
 
         return contentValues;
     }

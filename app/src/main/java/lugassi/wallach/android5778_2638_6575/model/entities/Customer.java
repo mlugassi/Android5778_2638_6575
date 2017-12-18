@@ -1,6 +1,9 @@
 package lugassi.wallach.android5778_2638_6575.model.entities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Customer {
     private String firstName;
@@ -81,7 +84,20 @@ public class Customer {
         return birthDay;
     }
 
-    public void setBirthDay(Calendar birthDay) {
-        this.birthDay = birthDay;
+    public String getBirthDayString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(birthDay.getTime());
+    }
+
+
+    public void setBirthDay(String birthDay) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.birthDay = Calendar.getInstance();
+            this.birthDay.setTime(sdf.parse(birthDay));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 }

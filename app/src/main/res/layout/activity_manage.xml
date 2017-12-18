@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="lugassi.wallach.android5778_2638_6575.controller.ManageActivity">
+    <ScrollView
+        android:background="@color/Orange"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:drawableRight="@drawable/parking"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/White"
+                android:textColor="@color/Gray"
+                android:id="@+id/add_branch_activity_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddBranch" />
+            <Button
+                android:drawableRight="@drawable/carmodel"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/White"
+                android:textColor="@color/Gray"
+                android:id="@+id/add_carModel_activity_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddCArModel" />
+            <Button
+                android:drawableRight="@drawable/car"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/White"
+                android:textColor="@color/Gray"
+                android:id="@+id/add_car_activity_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddCar" />
+
+            <Button
+                android:drawableRight="@drawable/manage"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/White"
+                android:textColor="@color/Gray"
+                android:id="@+id/show_branch_activity_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonManage" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

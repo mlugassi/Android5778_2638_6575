@@ -18,6 +18,10 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Reservation;
 
 public interface DB_manager {
 
+    public String checkAdmin(String userName, String password);
+
+    public Boolean createAdmin(String userName, String password , int userID);
+
     public int addCarModel(ContentValues contentValues) ;
 
     public int addCar(ContentValues contentValues);

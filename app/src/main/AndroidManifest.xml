@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lugassi.wallach.android5778_2638_6575">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -19,10 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.AddBranch" />
-        <activity android:name=".controller.Login" />
         <activity android:name=".controller.DataLists" />
         <activity android:name=".controller.AddCar" />
-        <activity android:name=".controller.AddCarModel"></activity>
+        <activity android:name=".controller.AddCarModel" />
+        <activity android:name=".controller.Login" />
+        <activity android:name=".controller.ManageActivity" />
+        <activity android:name=".controller.AddCustomer" />
+        <activity android:name=".controller.AddUser"></activity>
     </application>
 
 </manifest>

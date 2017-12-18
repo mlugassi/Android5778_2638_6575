@@ -38,9 +38,9 @@ public class DB_SQL implements DB_manager {
             String branchResult = GET(url + "Branch/GetSerialNumber.php");
             String carResult = GET(url + "Car/GetSerialNumber.php");
             String carModelResult = GET(url + "CarModel/GetSerialNumber.php");
-            Branch.setBranchIDSerializer(Integer.parseInt(branchResult.substring(0,branchResult.length() - 1)));
-            Car.setCarIDSerializer(Integer.parseInt(carResult.substring(0,carResult.length() - 1)));
-            CarModel.setModelCodeSerializer(Integer.parseInt(carModelResult.substring(0,carModelResult.length() - 1)));
+            Branch.setBranchIDSerializer(Integer.parseInt(branchResult.substring(0, branchResult.length() - 1)));
+            Car.setCarIDSerializer(Integer.parseInt(carResult.substring(0, carResult.length() - 1)));
+            CarModel.setModelCodeSerializer(Integer.parseInt(carModelResult.substring(0, carModelResult.length() - 1)));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -49,6 +49,67 @@ public class DB_SQL implements DB_manager {
 
     }
 
+    public Boolean createAdmin(String userName, String password, int userID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(UserConst.USER_NAME, userName);
+            params.put(UserConst.PASSWORD, password);
+            params.put(UserConst.USER_ID, userID);
+
+            String results = POST(url + "Login/CreateNewAdmin.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
+    }
+
+    public String checkAdmin(String userName, String password) {
+        try {
+            return new AsyncTask<String, Object, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    String results;
+                    try {
+                        Map<String, Object> map = new LinkedHashMap<>();
+
+                        map.put(UserConst.USER_NAME, params[0]);
+                        map.put(UserConst.PASSWORD, params[1]);
+
+                        results = POST(url + "Login/CheckAdmin.php", map);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return results;
+                }
+
+                @Override
+                protected void onPostExecute(String result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(userName, password).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+
+    /// add functions
     @Override
     public int addCarModel(ContentValues contentValues) {
         try {
@@ -101,7 +162,30 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public int addCustomer(ContentValues contentValues) {
-        return 0;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, 0);
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
+
+            String results = POST(url + "Customer/AddCustomer.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return contentValues.getAsInteger(CustomerConst.CUSTOMER_ID);
     }
 
     @Override
@@ -139,6 +223,33 @@ public class DB_SQL implements DB_manager {
         return 0;
     }
 
+
+    /// update functions
+
+    @Override
+    public boolean updateCar(int carID, ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarConst.CAR_ID, carID);
+            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
+            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+
+            String results = POST(url + "Car/UpdateCar.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
+    }
+
     @Override
     public boolean updateCarModel(int modelCode, ContentValues contentValues) {
         try {
@@ -166,17 +277,21 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
-    public boolean updateCar(int carID, ContentValues contentValues) {
+    public boolean updateCustomer(int customerID, ContentValues contentValues) {
         try {
             Map<String, Object> params = new LinkedHashMap<>();
 
-            params.put(CarConst.CAR_ID, carID);
-            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
-            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
-            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
-            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, customerID);
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
 
-            String results = POST(url + "Car/UpdateCar.php", params);
+            String results = POST(url + "Customer/UpdateCustomer.php", params);
             if (results.equals("")) {
                 throw new Exception("An error occurred on the server's side");
             }
@@ -187,11 +302,6 @@ public class DB_SQL implements DB_manager {
             throw new IllegalArgumentException(e.getMessage());
         }
         return true;
-    }
-
-    @Override
-    public boolean updateCustomer(int customerID, ContentValues contentValues) {
-        return false;
     }
 
     @Override
@@ -229,6 +339,8 @@ public class DB_SQL implements DB_manager {
         return false;
     }
 
+
+    /// remove functions
     @Override
     public boolean removeCarModel(int modelCode) {
         try {
@@ -306,7 +418,40 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
-    public boolean removeCustomer(int customerID) {
+    public boolean removeCustomer(final int customerID) {
+        try {
+            return new AsyncTask<Integer, Object, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Integer... params) {
+                    try {
+                        Map<String, Object> myParams = new LinkedHashMap<>();
+                        int customerID = params[0];
+
+                        myParams.put(CustomerConst.CUSTOMER_ID, customerID);
+
+                        String results = POST(url + "Customer/RemoveCustomer.php", myParams);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(customerID).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -358,6 +503,8 @@ public class DB_SQL implements DB_manager {
         return false;
     }
 
+
+    /// get functions
     @Override
     public ArrayList<Branch> getBranches() {
 
@@ -430,7 +577,29 @@ public class DB_SQL implements DB_manager {
 
     @Override
     public ArrayList<Customer> getCustomers() {
-        return null;
+        ArrayList<Customer> customers = new ArrayList<Customer>();
+        try {
+            JSONArray array = new JSONObject(GET(url + "Customer/GetCustomers.php")).getJSONArray("customers");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                Customer customer = new Customer();
+                customer.setCustomerID(jsonObject.getInt(CustomerConst.CUSTOMER_ID));
+                customer.setFirstName(jsonObject.getString(CustomerConst.FIRST_NAME));
+                customer.setFamilyName(jsonObject.getString(CustomerConst.FAMILY_NAME));
+                customer.setPhone(jsonObject.getInt(CustomerConst.PHONE));
+                customer.setCreditCard(jsonObject.getLong(CustomerConst.CREDIT_CARD));
+                customer.setEmail(jsonObject.getString(CustomerConst.EMAIL));
+                customer.setBirthDay(jsonObject.getString(CustomerConst.BIRTH_DAY));
+                customer.setGender(Gender.valueOf(jsonObject.getString(CustomerConst.GENDER)));
+                customer.setNumAccidents(jsonObject.getInt(CustomerConst.NUM_ACCIDENTS));
+
+                customers.add(customer);
+            }
+        } catch (Exception e) {
+        }
+
+        return customers;
     }
 
     @Override
@@ -442,6 +611,7 @@ public class DB_SQL implements DB_manager {
     public ArrayList<Reservation> getReservations() {
         return null;
     }
+
 
     private static String GET(String url) throws ExecutionException, InterruptedException {
 
