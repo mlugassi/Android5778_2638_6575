@@ -1,11 +1,11 @@
 package lugassi.wallach.android5778_2638_6575.controller;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -36,6 +36,7 @@ public class AddCar extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_car);
 
         db_manager = DBManagerFactory.getManager();
@@ -124,14 +125,14 @@ public class AddCar extends Activity implements View.OnClickListener {
         button = (Button) findViewById(R.id.createButton);
 
         button.setOnClickListener(this);
-        carModelsSpinner.setAdapter(new ArrayAdapter<CarModel>(this, R.layout.item_list_view, carModels) {
+        carModelsSpinner.setAdapter(new ArrayAdapter<CarModel>(this, R.layout.spinner_view, carModels) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.item_list_view, null);
+                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
 
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
+                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
 
                 idTextView.setText(((Integer) carModels.get(position).getModelCode()).toString());
@@ -145,10 +146,10 @@ public class AddCar extends Activity implements View.OnClickListener {
             public View getView(int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.item_comp_view, null);
+                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
 
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
+                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
 
                 idTextView.setText(((Integer) carModels.get(position).getModelCode()).toString());
@@ -159,14 +160,14 @@ public class AddCar extends Activity implements View.OnClickListener {
                 return convertView;
             }
         });
-        branchesSpinner.setAdapter(new ArrayAdapter<Branch>(this, R.layout.item_comp_view, branches) {
+        branchesSpinner.setAdapter(new ArrayAdapter<Branch>(this, R.layout.spinner_view, branches) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.item_list_view, null);
+                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
 
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
+                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
 
                 idTextView.setText(((Integer) branches.get(position).getBranchID()).toString());
@@ -181,10 +182,10 @@ public class AddCar extends Activity implements View.OnClickListener {
             public View getView(int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.item_comp_view, null);
+                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
 
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
+                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
 
                 idTextView.setText(((Integer) branches.get(position).getBranchID()).toString());

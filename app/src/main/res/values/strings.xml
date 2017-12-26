@@ -23,7 +23,13 @@
 
     <!-- Strings Texts -->
 
+    <string name="textCarType">Type</string>
+    <string name="textEngineCapacity">Engine</string>
+    <string name="textCompany">Company</string>
     <string name="textChooseDataList">Choose Data List To View And Edit:</string>
+    <string name="textBranchDetails">Branch Details</string>
+    <string name="textCarModelDetails">Car Model Details</string>
+    <string name="textCarDetails">Car Details</string>
     <string name="textName">Name: </string>
     <string name="textID">ID : </string>
     <string name="textDialogTitle">Edit Item</string>

@@ -45,13 +45,14 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             public View getView(int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.item_comp_view, null);
+                    convertView = View.inflate(DataLists.this, R.layout.branch_list_view, null);
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+                TextView nameAnIdTextView = (TextView) convertView.findViewById(R.id.nameAndIdEditText);
+                TextView addressTextView = (TextView) convertView.findViewById(R.id.addressEditText);
 
-                idTextView.setText(((Integer) db_manager.getBranches().get(position).getBranchID()).toString());
-                nameTextView.setText(db_manager.getBranches().get(position).getBranchName());
+                Branch branch = db_manager.getBranches().get(position);
+                nameAnIdTextView.setText(((Integer) branch.getBranchID()).toString() + " " + branch.getBranchName());
+                addressTextView.setText(branch.getAddress());
 
                 return convertView;
             }
@@ -61,13 +62,28 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             public View getView(int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.item_comp_view, null);
+                    convertView = View.inflate(DataLists.this, R.layout.car_list_view, null);
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+                TextView carIdEditText = (TextView) convertView.findViewById(R.id.carIdEditText);
+                TextView modelNameAndCompanyEditText = (TextView) convertView.findViewById(R.id.modelNameAndCompanyEditText);
+                TextView branchNameEditText = (TextView) convertView.findViewById(R.id.branchNameEditText);
 
-                idTextView.setText(((Integer) db_manager.getCars().get(position).getBranchID()).toString());
-                nameTextView.setText("");
+
+                Car car = db_manager.getCars().get(position);
+                String branchName = "" , modelName = "" , companyName = "";
+                for (Branch branch : db_manager.getBranches())
+                    if (branch.getBranchID() == car.getBranchID())
+                        branchName = branch.getBranchName();
+                for (CarModel carModel : db_manager.getCarModels())
+                    if (carModel.getModelCode() == car.getModelCode())
+                    {
+                        modelName = carModel.getModelName();
+                        companyName = carModel.getCompany().name();
+                    }
+
+                carIdEditText.setText(((Integer) car.getCarID()).toString());
+                modelNameAndCompanyEditText.setText(modelName + ", " + companyName);
+                branchNameEditText.setText(branchName);
 
                 return convertView;
             }
@@ -77,13 +93,14 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             public View getView(int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.item_comp_view, null);
+                    convertView = View.inflate(DataLists.this, R.layout.car_model_list_view, null);
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.itemIdEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+                TextView carModelTextView = (TextView) convertView.findViewById(R.id.modelCodeEditText);
+                TextView nameAndCompanyEditText = (TextView) convertView.findViewById(R.id.nameAndCompanyEditText);
 
-                idTextView.setText(((Integer) db_manager.getCarModels().get(position).getModelCode()).toString());
-                nameTextView.setText(db_manager.getCarModels().get(position).getModelName());
+                CarModel carModel = db_manager.getCarModels().get(position);
+                carModelTextView.setText(((Integer) carModel.getModelCode()).toString());
+                nameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
 
                 return convertView;
             }

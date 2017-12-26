@@ -52,7 +52,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
         carTypeSpinner = (Spinner) findViewById(R.id.carTypeSpinner);
         //     colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         maxGasEditText = (EditText) findViewById(R.id.maxGasEditText);
-        button = (Button) findViewById(R.id.addButton);
+        button = (Button) findViewById(R.id.button);
 
         companySpinner.setAdapter(new ArrayAdapter<Company>(this, android.R.layout.simple_spinner_item, Company.values()));
         engineCapacitySpinner.setAdapter(new ArrayAdapter<EngineCapacity>(this, android.R.layout.simple_spinner_item, EngineCapacity.values()));

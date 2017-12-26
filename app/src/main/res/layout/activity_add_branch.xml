@@ -4,48 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/White"
     tools:context="lugassi.wallach.android5778_2638_6575.controller.AddBranch">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout android:layout_width="match_parent"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/OrangeRed"
+                android:padding="15dp"
+                android:text="@string/textBranchDetails"
+                android:textAlignment="center"
+                android:textColor="@color/White"
+                android:textSize="30dp" />
+
             <EditText
                 android:id="@+id/nameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:ems="10"
-                android:inputType="text"
-                android:hint="@string/hintName"/>
+                android:hint="@string/hintName"
+                android:inputType="text" />
+
             <EditText
                 android:id="@+id/cityEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:ems="10"
-                android:inputType="text"
-                android:hint="@string/hintCity" />
+                android:hint="@string/hintCity"
+                android:inputType="text" />
+
             <EditText
                 android:id="@+id/addressEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:ems="10"
-                android:inputType="text"
-                android:hint="@string/hintAddress" />
+                android:hint="@string/hintAddress"
+                android:inputType="text" />
+
             <EditText
                 android:id="@+id/parkingSpaceEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:ems="10"
-                android:inputType="number"
-                android:hint="@string/hintParkingSpace" />
+                android:hint="@string/hintParkingSpace"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="100dp"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:layout_height="50dp"
-                android:hint="@string/buttonAdd" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_shape"
+                android:text="@string/buttonAdd"
+                android:textColor="@color/Black" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
