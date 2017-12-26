@@ -26,7 +26,11 @@
     <string name="textCarType">Type</string>
     <string name="textEngineCapacity">Engine</string>
     <string name="textCompany">Company</string>
+
+    <string name="textAddCustomer">New Customer</string>
     <string name="textChooseDataList">Choose Data List To View And Edit:</string>
+    <string name="textUserNameAndPassword">Choose User Name And Password For Login</string>
+    <string name="textUserName">Create User Name</string>
     <string name="textBranchDetails">Branch Details</string>
     <string name="textCarModelDetails">Car Model Details</string>
     <string name="textCarDetails">Car Details</string>
