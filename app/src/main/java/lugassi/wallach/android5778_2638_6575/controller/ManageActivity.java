@@ -24,6 +24,7 @@ public class ManageActivity extends Activity {
         findViews();
     }
 
+
     private void findViews() {
         addBranchActivityButton = (Button) findViewById(R.id.add_branch_activity_button);
         addCarActivityButton = (Button) findViewById(R.id.add_car_activity_button);
