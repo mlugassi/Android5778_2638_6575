@@ -86,5 +86,7 @@
     <string name="exceptionInvalidValue">Invalid Value</string>
     <string name="exceptionUserName">User Name Must Be Less Than 25 Characters</string>
     <string name="exceptionPassword">Password Dodn\'t Match</string>
+
+
     <string name="title_activity_add_customer">AddCustomer</string>
 </resources>

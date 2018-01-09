@@ -39,6 +39,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         setBranchValues();
     }
 
+    // set values from res.values and get the elements for this activity and be able to get event from button press
     private void findViews() {
         nameEditText = (EditText) findViewById(R.id.nameEditText);
         cityEditText = (EditText) findViewById(R.id.cityEditText);
@@ -48,6 +49,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         button.setOnClickListener(this);
     }
 
+    // set branch details for option to be called to update specific branch
     void setBranchValues() {
         position = getIntent().getIntExtra(CarRentConst.POSITION, -1);
         if (position >= 0) {
@@ -60,6 +62,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         } else resetInput();
     }
 
+    // clear fields from input text by user
     private void resetInput() {
         nameEditText.setText("");
         addressEditText.setText("");
@@ -68,6 +71,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         branch = null;
     }
 
+    // check that values inserted are not error (meanwhile just basic non empty)
     private boolean checkValues() {
         if (TextUtils.isEmpty(nameEditText.getText().toString())) {
             nameEditText.setError(getString(R.string.exceptionEmptyFileds));
@@ -151,6 +155,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         }
     }
 
+    // implemented because implements onClickListener interface
     @Override
     public void onClick(View v) {
         if (v == button) {
