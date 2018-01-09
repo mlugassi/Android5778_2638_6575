@@ -55,7 +55,7 @@ public class AddCar extends Activity implements View.OnClickListener {
         position = getIntent().getIntExtra(CarRentConst.POSITION, -1);
         if (position >= 0) {
             car = db_manager.getCars().get(position);
-            //  branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
+            // branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
             // carModelsSpinner.setSelection(car.getModelCode());
             button.setText(getString(R.string.buttonUpdate));
         }
