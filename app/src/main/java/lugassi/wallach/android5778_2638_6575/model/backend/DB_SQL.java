@@ -525,7 +525,6 @@ public class DB_SQL implements DB_manager {
             }
         } catch (Exception e) {
         }
-
         return branches;
     }
 
