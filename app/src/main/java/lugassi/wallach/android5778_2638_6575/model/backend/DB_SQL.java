@@ -30,7 +30,7 @@ import static android.util.Patterns.WEB_URL;
 
 public class DB_SQL implements DB_manager {
 
-    private String url = "http://mlugassi.vlab.jct.ac.il/";
+    private String url = "http://mlugassi.vlab.jct.ac.il/JAVA-Project/";
 
     public DB_SQL() {
 

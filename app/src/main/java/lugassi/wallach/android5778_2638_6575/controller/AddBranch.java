@@ -32,7 +32,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_add_branch);
         db_manager = DBManagerFactory.getManager();
         findViews();
