@@ -1,12 +1,10 @@
 package lugassi.wallach.android5778_2638_6575.controller;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,7 +25,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
     private EditText parkingSpaceEditText;
     private Button button;
     private Branch branch;
-    private int position;
+    private int branchID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +49,9 @@ public class AddBranch extends Activity implements View.OnClickListener {
 
     // set branch details for option to be called to update specific branch
     void setBranchValues() {
-        position = getIntent().getIntExtra(CarRentConst.POSITION, -1);
-        if (position >= 0) {
-            branch = db_manager.getBranches().get(position);
+        branchID = getIntent().getIntExtra(BranchConst.BRANCH_ID, -1);
+        if (branchID >= 0) {
+            branch = db_manager.getBranch(branchID);
             nameEditText.setText(branch.getBranchName());
             cityEditText.setText(branch.getCity());
             addressEditText.setText(branch.getAddress());
@@ -103,21 +101,25 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
 
-            new AsyncTask<Object, Object, Boolean>() {
-                @Override
-                protected void onPostExecute(Boolean idResult) {
-                    super.onPostExecute(idResult);
-                    if (idResult)
-                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                protected Boolean doInBackground(Object... params) {
-                    return db_manager.updateBranch(branch.getBranchID(), CarRentConst.branchToContentValues(branch));
-                }
-            }.execute();
+            if (db_manager.updateBranch(CarRentConst.branchToContentValues(branch)))
+                Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+//            new AsyncTask<Object, Object, Boolean>() {
+//                @Override
+//                protected void onPostExecute(Boolean idResult) {
+//                    super.onPostExecute(idResult);
+//                    if (idResult)
+//                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
+//                    else
+//                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                protected Boolean doInBackground(Object... params) {
+//                    return db_manager.updateBranch(branch.getBranchID(), CarRentConst.branchToContentValues(branch));
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -135,20 +137,21 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setMaxParkingSpace(maxParkingSpace);
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
-
-            new AsyncTask<Object, Object, Integer>() {
-                @Override
-                protected void onPostExecute(Integer idResult) {
-                    super.onPostExecute(idResult);
-                    resetInput();
-                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddBranchMessage) + idResult, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                protected Integer doInBackground(Object... params) {
-                    return db_manager.addBranch(CarRentConst.branchToContentValues(branch));
-                }
-            }.execute();
+            Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddBranchMessage) + db_manager.addBranch(CarRentConst.branchToContentValues(branch)), Toast.LENGTH_SHORT).show();
+            resetInput();
+//            new AsyncTask<Object, Object, Integer>() {
+//                @Override
+//                protected void onPostExecute(Integer idResult) {
+//                    super.onPostExecute(idResult);
+//                    resetInput();
+//                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddBranchMessage) + idResult, Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                protected Integer doInBackground(Object... params) {
+//                    return db_manager.addBranch(CarRentConst.branchToContentValues(branch));
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -159,7 +162,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == button) {
-            if (position == -1) addBranch();
+            if (branchID == -1) addBranch();
             else updateBranch();
         }
     }

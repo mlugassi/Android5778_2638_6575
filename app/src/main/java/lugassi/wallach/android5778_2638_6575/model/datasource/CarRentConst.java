@@ -13,8 +13,6 @@ import lugassi.wallach.android5778_2638_6575.model.entities.*;
 
 public class CarRentConst {
 
-    public static final String POSITION = "position";
-
     public static class UserConst {
         public static final String USER_NAME = "userName";
         public static final String PASSWORD = "password";

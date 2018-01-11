@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
-import lugassi.wallach.android5778_2638_6575.model.backend.DB_List;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
 import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
@@ -72,13 +71,12 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
 
 
                 Car car = db_manager.getCars().get(position);
-                String branchName = "" , modelName = "" , companyName = "";
+                String branchName = "", modelName = "", companyName = "";
                 for (Branch branch : db_manager.getBranches())
                     if (branch.getBranchID() == car.getBranchID())
                         branchName = branch.getBranchName();
                 for (CarModel carModel : db_manager.getCarModels())
-                    if (carModel.getModelCode() == car.getModelCode())
-                    {
+                    if (carModel.getModelCode() == car.getModelCode()) {
                         modelName = carModel.getModelName();
                         companyName = carModel.getCompany().name();
                     }
@@ -165,21 +163,29 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Class nxtActivity = null;
+                int id = -1;
+                String ID = "";
                 switch (dataSpinner.getSelectedItemPosition()) {
                     case 0:
                         nxtActivity = AddBranch.class;
+                        id = ((Branch) dataListView.getItemAtPosition(position)).getBranchID();
+                        ID = CarRentConst.BranchConst.BRANCH_ID;
                         break;
                     case 1:
                         nxtActivity = AddCar.class;
+                        id = ((Car) dataListView.getItemAtPosition(position)).getCarID();
+                        ID = CarRentConst.CarConst.CAR_ID;
                         break;
                     case 2:
                         nxtActivity = AddCarModel.class;
+                        id = ((CarModel) dataListView.getItemAtPosition(position)).getModelCode();
+                        ID = CarRentConst.CarModelConst.MODEL_CODE;
                         break;
                     default:
                         return;
                 }
                 Intent myIntent = new Intent(DataLists.this, nxtActivity);
-                myIntent.putExtra(CarRentConst.POSITION, position);
+                myIntent.putExtra(ID, id);
                 DataLists.this.startActivity(myIntent);
             }
         });

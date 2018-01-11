@@ -110,6 +110,7 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="@string/hintBirthDay"
+                android:focusable="false"
                 android:inputType="date" />
 
             <Button

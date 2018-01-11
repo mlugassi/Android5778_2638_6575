@@ -1,6 +1,7 @@
 package lugassi.wallach.android5778_2638_6575.controller;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
@@ -36,6 +40,8 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     private Spinner genderSpinner;
     private EditText birthDayEditText;
     private Button button;
+    Calendar myCalendar;
+    DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,28 @@ public class AddCustomer extends Activity implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_customer);
         db_manager = DBManagerFactory.getManager();
+        myCalendar = Calendar.getInstance();
+        date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
         findViews();
+    }
+
+    private void updateLabel() {
+        String myFormat = "yyyy/MM/dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        birthDayEditText.setText(sdf.format(myCalendar.getTime()));
     }
 
     private void findViews() {
@@ -59,6 +86,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
 
         genderSpinner.setAdapter(new ArrayAdapter<Gender>(this, android.R.layout.simple_spinner_item, Gender.values()));
         button.setOnClickListener(this);
+        birthDayEditText.setOnClickListener(this);
     }
 
     private boolean checkValues() {
@@ -135,6 +163,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             int phone = Integer.parseInt(phoneEditText.getText().toString());
             long creditCard = Long.parseLong(creditCardEditText.getText().toString());
 
+            String x = birthDayEditText.getText().toString();
             final Customer customer = new Customer();
             customer.setFirstName(firstNameEditText.getText().toString());
             customer.setFamilyName(familyNameEditText.getText().toString());
@@ -142,27 +171,31 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             customer.setPhone(phone);
             customer.setEmail(emailEditText.getText().toString());
             customer.setCreditCard(creditCard);
-            customer.setGender((Gender)genderSpinner.getSelectedItem());
+            customer.setGender((Gender) genderSpinner.getSelectedItem());
             customer.setBirthDay(birthDayEditText.getText().toString());
-
-            new AsyncTask<Object, Object, Integer>() {
-                @Override
-                protected void onPostExecute(Integer idResult) {
-                    super.onPostExecute(idResult);
-                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddCustomer.this , AddUser.class);
-                    intent.putExtra(CarRentConst.UserConst.USER_ID , idResult);
-                    finish();
-                    startActivity(intent);
-                }
-
-                @Override
-                protected Integer doInBackground(Object... params) {
-                    int x = 3;
-                   return db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
-
-                }
-            }.execute();
+            int idResult = db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
+            Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AddCustomer.this, AddUser.class);
+            intent.putExtra(CarRentConst.UserConst.USER_ID, idResult);
+            finish();
+            startActivity(intent);
+//            new AsyncTask<Object, Object, Integer>() {
+//                @Override
+//                protected void onPostExecute(Integer idResult) {
+//                    super.onPostExecute(idResult);
+//                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(AddCustomer.this, AddUser.class);
+//                    intent.putExtra(CarRentConst.UserConst.USER_ID, idResult);
+//                    finish();
+//                    startActivity(intent);
+//                }
+//
+//                @Override
+//                protected Integer doInBackground(Object... params) {
+//                    return db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
+//
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -173,6 +206,12 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v == button) {
             addCustomer();
+        }
+        if (v == birthDayEditText) {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(AddCustomer.this, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         }
     }
 

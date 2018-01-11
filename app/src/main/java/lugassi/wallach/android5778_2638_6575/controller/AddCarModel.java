@@ -29,11 +29,10 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     private Spinner engineCapacitySpinner;
     private EditText seatsEditText;
     private Spinner carTypeSpinner;
-    //    private Spinner colorSpinner;
     private EditText maxGasEditText;
     private Button button;
     private CarModel carModel;
-    private int position;
+    private int modelCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +61,9 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     }
 
     void setCarModelValues() {
-        position = getIntent().getIntExtra(CarRentConst.POSITION, -1);
-        if (position >= 0) {
-            carModel = db_manager.getCarModels().get(position);
+        modelCode = getIntent().getIntExtra(CarRentConst.CarModelConst.MODEL_CODE, -1);
+        if (modelCode >= 0) {
+            carModel = db_manager.getCarModel(modelCode);
             nameEditText.setText(carModel.getModelName());
             companySpinner.setSelection(carModel.getCompany().ordinal());
             engineCapacitySpinner.setSelection(carModel.getEngineCapacity().ordinal());
@@ -131,22 +130,25 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setEngineCapacity((EngineCapacity) engineCapacitySpinner.getSelectedItem());
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
-
-            new AsyncTask<Object, Object, Boolean>() {
-                @Override
-                protected void onPostExecute(Boolean idResult) {
-                    super.onPostExecute(idResult);
-                    if (idResult)
-                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarModelMessage), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                protected Boolean doInBackground(Object... params) {
-                    return db_manager.updateCarModel(carModel.getModelCode(), CarRentConst.carModelToContentValues(carModel));
-                }
-            }.execute();
+            if (db_manager.updateCarModel(CarRentConst.carModelToContentValues(carModel)))
+                Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarModelMessage), Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+//            new AsyncTask<Object, Object, Boolean>() {
+//                @Override
+//                protected void onPostExecute(Boolean idResult) {
+//                    super.onPostExecute(idResult);
+//                    if (idResult)
+//                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarModelMessage), Toast.LENGTH_SHORT).show();
+//                    else
+//                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                protected Boolean doInBackground(Object... params) {
+//                    return db_manager.updateCarModel(CarRentConst.carModelToContentValues(carModel));
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -167,21 +169,22 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setEngineCapacity((EngineCapacity) engineCapacitySpinner.getSelectedItem());
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
-            //  contentValues.put(CarRentConst.CarModelConst.COLOR, ((Color) colorSpinner.getSelectedItem()).toString());
+            Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddCarModelMessage) + db_manager.addCarModel(CarRentConst.carModelToContentValues(carModel)), Toast.LENGTH_SHORT).show();
+            resetInput();
 
-            new AsyncTask<Object, Object, Integer>() {
-                @Override
-                protected void onPostExecute(Integer idResult) {
-                    super.onPostExecute(idResult);
-                    resetInput();
-                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddCarModelMessage) + idResult, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                protected Integer doInBackground(Object... params) {
-                    return db_manager.addCarModel(CarRentConst.carModelToContentValues(carModel));
-                }
-            }.execute();
+//            new AsyncTask<Object, Object, Integer>() {
+//                @Override
+//                protected void onPostExecute(Integer idResult) {
+//                    super.onPostExecute(idResult);
+//                    resetInput();
+//                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddCarModelMessage) + idResult, Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                protected Integer doInBackground(Object... params) {
+//                    return db_manager.addCarModel(CarRentConst.carModelToContentValues(carModel));
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -191,7 +194,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == button) {
-            if (position == -1)
+            if (modelCode == -1)
                 addCarModel();
             else updateCarModel();
         }

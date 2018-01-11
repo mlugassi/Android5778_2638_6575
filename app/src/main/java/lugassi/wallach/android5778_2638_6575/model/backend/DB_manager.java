@@ -20,32 +20,24 @@ public interface DB_manager {
 
     public String checkAdmin(String userName, String password);
 
-    public Boolean createAdmin(String userName, String password , int userID);
+    public Boolean createAdmin(String userName, String password, int userID);
 
-    public int addCarModel(ContentValues contentValues) ;
+    public int addCarModel(ContentValues contentValues);
 
     public int addCar(ContentValues contentValues);
 
     public int addCustomer(ContentValues contentValues);
 
-    public int addBranch(ContentValues contentValues) ;
-
-    public int addReservation(ContentValues contentValues);
-
-    public int addPromotion(ContentValues contentValues);
+    public int addBranch(ContentValues contentValues);
 
 
-    public boolean updateCarModel(int modelCode, ContentValues contentValues);
+    public boolean updateCarModel(ContentValues contentValues);
 
-    public boolean updateCar(int carID, ContentValues contentValues);
+    public boolean updateCar(ContentValues contentValues);
 
-    public boolean updateCustomer(int customerID, ContentValues contentValues);
+    public boolean updateCustomer(ContentValues contentValues);
 
-    public boolean updateBranch(int branchID, ContentValues contentValues);
-
-    public boolean updateReservation(int reservationID, ContentValues contentValues);
-
-    public boolean updatePromotion(int customerID, ContentValues contentValues);
+    public boolean updateBranch(ContentValues contentValues);
 
 
     public boolean removeCarModel(int modelCode);
@@ -56,10 +48,6 @@ public interface DB_manager {
 
     public boolean removeBranch(int branchID);
 
-    public boolean removeReservation(int reservationID);
-
-    public boolean removePromotion(int customerID);
-
 
     public ArrayList<Branch> getBranches();
 
@@ -69,7 +57,11 @@ public interface DB_manager {
 
     public ArrayList<Customer> getCustomers();
 
-    public ArrayList<Promotion> getPromotions();
+    public Branch getBranch(int branchID);
 
-    public  ArrayList<Reservation> getReservations();
+    public Customer getCustomer(int customerID);
+
+    public CarModel getCarModel(int modelCode);
+
+    public Car getCar(int carID);
 }

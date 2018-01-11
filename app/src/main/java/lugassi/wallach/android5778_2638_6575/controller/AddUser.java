@@ -70,23 +70,29 @@ public class AddUser extends Activity implements View.OnClickListener {
                 return;
             final String userName = userNameEditText.getText().toString();
             final String password = passwordEditText.getText().toString();
-            new AsyncTask<Object, Object, Boolean>() {
-                @Override
-                protected void onPostExecute(Boolean aBoolean) {
-                    super.onPostExecute(aBoolean);
-                    if(aBoolean)
-                    {
-                        Intent intent = new Intent(AddUser.this , ManageActivity.class);
-                        finish();
-                        AddUser.this.startActivity(intent);
-                    }
-                }
 
-                @Override
-                protected Boolean doInBackground(Object... params) {
-                    return db_manager.createAdmin(userName, password , customerID);
-                }
-            }.execute();
+            if (db_manager.createAdmin(userName, password, customerID)) {
+                Intent intent = new Intent(AddUser.this, ManageActivity.class);
+                finish();
+                AddUser.this.startActivity(intent);
+            }
+//            new AsyncTask<Object, Object, Boolean>() {
+//                @Override
+//                protected void onPostExecute(Boolean aBoolean) {
+//                    super.onPostExecute(aBoolean);
+//                    if(aBoolean)
+//                    {
+//                        Intent intent = new Intent(AddUser.this , ManageActivity.class);
+//                        finish();
+//                        AddUser.this.startActivity(intent);
+//                    }
+//                }
+//
+//                @Override
+//                protected Boolean doInBackground(Object... params) {
+//                    return db_manager.createAdmin(userName, password , customerID);
+//                }
+//            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();

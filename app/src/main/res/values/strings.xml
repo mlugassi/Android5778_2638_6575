@@ -26,7 +26,8 @@
     <string name="textCarType">Type</string>
     <string name="textEngineCapacity">Engine</string>
     <string name="textCompany">Company</string>
-
+    textSettings
+    <string name="textSettings">Settings</string>
     <string name="textAddCustomer">New Customer</string>
     <string name="textChooseDataList">Choose Data List To View And Edit:</string>
     <string name="textUserNameAndPassword">Choose User Name And Password For Login</string>
@@ -79,6 +80,8 @@
     <string name="buttonManage">Manage</string>
     <string name="buttonSettings">Settings</string>
     <string name="buttonLogin">Login</string>
+    <string name="buttonUserSettings">User Settings</string>
+    <string name="buttonPersonalSettings">Personal Settings</string>
 
 
     <!-- Strings Exceptions -->

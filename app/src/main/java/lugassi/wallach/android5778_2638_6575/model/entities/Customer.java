@@ -91,7 +91,7 @@ public class Customer {
 
 
     public void setBirthDay(String birthDay) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         try {
             this.birthDay = Calendar.getInstance();
             this.birthDay.setTime(sdf.parse(birthDay));
