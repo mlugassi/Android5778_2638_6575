@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.List;
+
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;

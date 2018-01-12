@@ -283,6 +283,46 @@ public class DB_SQL implements DB_manager {
         }
         return branches;
     }
+//    public ArrayList<Branch> getBranches() {
+//        try {
+//            return new AsyncTask<Object, Object, ArrayList<Branch>>() {
+//                @Override
+//                protected ArrayList<Branch> doInBackground(Object... params) {
+//                    try {
+//                        ArrayList<Branch> branches = new ArrayList<Branch>();
+//                        JSONArray array = new JSONObject(GET(url + "Branch/GetBranches.php")).getJSONArray("branches");
+//                        for (int i = 0; i < array.length(); i++) {
+//                            JSONObject jsonObject = array.getJSONObject(i);
+//
+//                            Branch branch = new Branch(jsonObject.getInt(BranchConst.BRANCH_ID));
+//                            branch.setAddress(jsonObject.getString(BranchConst.ADDRESS));
+//                            branch.setMaxParkingSpace(jsonObject.getInt(BranchConst.MAX_PARKING_SPACE));
+//                            branch.setCity(jsonObject.getString(BranchConst.CITY));
+//                            branch.setBranchName(jsonObject.getString(BranchConst.BRANCH_NAME));
+//                            branch.setActualParkingSpace(jsonObject.getInt(BranchConst.ACTUAL_PARKING_SPACE));
+//
+//                            branches.add(branch);
+//                            return branches;
+//
+//                        }
+//                    } catch (Exception e) {
+//                    }
+//                    return null;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(ArrayList<Branch> result) {
+//                    super.onPostExecute(result);
+//                }
+//            }.execute().get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
 
     @Override
     public Branch getBranch(int branchID) {
