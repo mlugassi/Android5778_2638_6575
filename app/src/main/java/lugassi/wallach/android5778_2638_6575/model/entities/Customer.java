@@ -3,7 +3,8 @@ package lugassi.wallach.android5778_2638_6575.model.entities;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.Gender;
 
 public class Customer {
     private String firstName;
@@ -15,6 +16,10 @@ public class Customer {
     private Gender gender;
     private int numAccidents;
     private Calendar birthDay;
+
+    public Customer() {
+        numAccidents = 0;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -42,6 +47,10 @@ public class Customer {
 
     public Integer getPhone() {
         return phone;
+    }
+
+    public String getPhoneString() {
+        return "0" + ((Integer) phone).toString();
     }
 
     public void setPhone(Integer phone) {
@@ -91,7 +100,7 @@ public class Customer {
 
 
     public void setBirthDay(String birthDay) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             this.birthDay = Calendar.getInstance();
             this.birthDay.setTime(sdf.parse(birthDay));

@@ -11,7 +11,6 @@ public class ListsDataSource {
     public static ArrayList<Customer> customersList = new ArrayList<Customer>();
     public static ArrayList<Car> carsList = new ArrayList<Car>();
     public static ArrayList<CarModel> carModelsList = new ArrayList<CarModel>();
-    public static ArrayList<Reservation> reservationsList = new ArrayList<Reservation>();
     public static ArrayList<Branch> branchesList = new ArrayList<Branch>();
     public static ArrayList<Promotion> promotionsList = new ArrayList<Promotion>();
 }

@@ -1,11 +1,9 @@
 package lugassi.wallach.android5778_2638_6575.model.datasource;
 
 import android.content.ContentValues;
-import android.icu.util.Calendar;
-
-import java.text.SimpleDateFormat;
 
 import lugassi.wallach.android5778_2638_6575.model.entities.*;
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.*;
 
 /**
  * Created by Michael on 13/11/2017.
@@ -147,22 +145,6 @@ public class CarRentConst {
         return promotion;
     }
 
-    public static Reservation contentValuesReservation(ContentValues contentValues) {
-        Reservation reservation = new Reservation();
-        reservation.setReservationID(contentValues.getAsInteger(ReservationConst.RESERVATION_ID));
-        reservation.setCustomerID(contentValues.getAsInteger(ReservationConst.CUSTOMER_ID));
-        reservation.setBeginMileage(contentValues.getAsLong(ReservationConst.BEGIN_MILEAGE));
-        reservation.setCarID(contentValues.getAsInteger(ReservationConst.CAR_ID));
-        reservation.setFinishMileage(contentValues.getAsLong(ReservationConst.FINISH_MILEAGE));
-        reservation.setGasFilled(contentValues.getAsInteger(ReservationConst.GAS_FILLED));
-        reservation.setGasFull(contentValues.getAsBoolean(ReservationConst.IS_GAS_FULL));
-        reservation.setOpen(contentValues.getAsBoolean(ReservationConst.IS_OPEN));
-        reservation.setReservationCost(contentValues.getAsFloat(ReservationConst.RESERVATION_COST));
-//        reservation.setStartDate();
-//        reservation.setReturnDate();
-//        reservation.setEndDate();
-        return reservation;
-    }
 
     public static ContentValues branchToContentValues(Branch branch) {
         ContentValues contentValues = new ContentValues();
@@ -195,7 +177,6 @@ public class CarRentConst {
         contentValues.put(CarModelConst.ENGINE_CAPACITY, carModel.getEngineCapacity().name());
         contentValues.put(CarModelConst.SEATS, carModel.getSeats());
         contentValues.put(CarModelConst.CAR_TYPE, carModel.getCarType().name());
-        //contentValues.put(CarModelConst.COLOR, carModel.getColor().toString());
         contentValues.put(CarModelConst.MAX_GAS_TANK, carModel.getMaxGasTank());
 
         return contentValues;
@@ -212,7 +193,7 @@ public class CarRentConst {
         contentValues.put(CustomerConst.GENDER, customer.getGender().name());
         contentValues.put(CustomerConst.NUM_ACCIDENTS, customer.getNumAccidents());
         contentValues.put(CustomerConst.PHONE, customer.getPhone());
-        contentValues.put(CustomerConst.BIRTH_DAY, customer.getBirthDayString() );
+        contentValues.put(CustomerConst.BIRTH_DAY, customer.getBirthDayString());
 
         return contentValues;
     }
@@ -226,23 +207,4 @@ public class CarRentConst {
 
         return contentValues;
     }
-
-    public static ContentValues reservationToContentValues(Reservation reservation) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(ReservationConst.RESERVATION_ID, reservation.getReservationID());
-        contentValues.put(ReservationConst.CUSTOMER_ID, reservation.getCustomerID());
-        contentValues.put(ReservationConst.BEGIN_MILEAGE, reservation.getBeginMileage());
-        contentValues.put(ReservationConst.CAR_ID, reservation.getCarID());
-        contentValues.put(ReservationConst.FINISH_MILEAGE, reservation.getFinishMileage());
-        contentValues.put(ReservationConst.GAS_FILLED, reservation.getGasFilled());
-        contentValues.put(ReservationConst.IS_GAS_FULL, reservation.isGasFull());
-        contentValues.put(ReservationConst.IS_OPEN, reservation.isOpen());
-        contentValues.put(ReservationConst.RESERVATION_COST, reservation.getReservationCost());
-//        reservation.setStartDate();
-//        reservation.setReturnDate();
-//        reservation.setEndDate();
-        return contentValues;
-    }
-
 }

@@ -8,8 +8,6 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
 import lugassi.wallach.android5778_2638_6575.model.entities.Car;
 import lugassi.wallach.android5778_2638_6575.model.entities.CarModel;
 import lugassi.wallach.android5778_2638_6575.model.entities.Customer;
-import lugassi.wallach.android5778_2638_6575.model.entities.Promotion;
-import lugassi.wallach.android5778_2638_6575.model.entities.Reservation;
 
 
 /**
@@ -18,50 +16,54 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Reservation;
 
 public interface DB_manager {
 
-    public String checkAdmin(String userName, String password);
+    public String checkAdmin(String userName, String password) throws Exception;
 
-    public Boolean createAdmin(String userName, String password, int userID);
+    public Boolean createAdmin(String userName, String password, int userID) throws Exception;
 
-    public int addCarModel(ContentValues contentValues);
+    public int addCarModel(ContentValues contentValues) throws Exception;
 
-    public int addCar(ContentValues contentValues);
+    public int addCar(ContentValues contentValues) throws Exception;
 
-    public int addCustomer(ContentValues contentValues);
+    public int addCustomer(ContentValues contentValues) throws Exception;
 
-    public int addBranch(ContentValues contentValues);
-
-
-    public boolean updateCarModel(ContentValues contentValues);
-
-    public boolean updateCar(ContentValues contentValues);
-
-    public boolean updateCustomer(ContentValues contentValues);
-
-    public boolean updateBranch(ContentValues contentValues);
+    public int addBranch(ContentValues contentValues) throws Exception;
 
 
-    public boolean removeCarModel(int modelCode);
+    public boolean updateCarModel(ContentValues contentValues) throws Exception;
 
-    public boolean removeCar(int carID);
+    public boolean updateCar(ContentValues contentValues) throws Exception;
 
-    public boolean removeCustomer(int customerID);
+    public boolean updateCustomer(ContentValues contentValues) throws Exception;
 
-    public boolean removeBranch(int branchID);
+    public boolean updateBranch(ContentValues contentValues) throws Exception;
 
 
-    public ArrayList<Branch> getBranches();
+    public boolean removeCarModel(int modelCode) throws Exception;
 
-    public ArrayList<Car> getCars();
+    public boolean removeCar(int carID) throws Exception;
 
-    public ArrayList<CarModel> getCarModels();
+    public boolean removeCustomer(int customerID) throws Exception;
 
-    public ArrayList<Customer> getCustomers();
+    public boolean removeBranch(int branchID) throws Exception;
 
-    public Branch getBranch(int branchID);
 
-    public Customer getCustomer(int customerID);
+    public ArrayList<Branch> getBranches() throws Exception;
 
-    public CarModel getCarModel(int modelCode);
+    public ArrayList<Car> getCars() throws Exception;
 
-    public Car getCar(int carID);
+    public ArrayList<CarModel> getCarModels() throws Exception;
+
+    public ArrayList<Customer> getCustomers() throws Exception;
+
+    public Branch getBranch(int branchID) throws Exception;
+
+    public Customer getCustomer(int customerID) throws Exception;
+
+    public CarModel getCarModel(int modelCode) throws Exception;
+
+    public Car getCar(int carID) throws Exception;
+
+    public boolean removePromotion(final int customerID) throws Exception;
+
+    public boolean addPromotion(ContentValues contentValues) throws Exception;
 }

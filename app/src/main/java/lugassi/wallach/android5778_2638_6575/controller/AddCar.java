@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
@@ -40,8 +41,36 @@ public class AddCar extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_add_car);
 
         db_manager = DBManagerFactory.getManager();
-        branches = db_manager.getBranches();
-        carModels = db_manager.getCarModels();
+        try {
+            branches = new AsyncTask<Object, Object, ArrayList<Branch>>() {
+                @Override
+                protected ArrayList<Branch> doInBackground(Object... params) {
+                    try {
+                        return db_manager.getBranches();
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return null;
+                    }
+                }
+            }.execute().get();
+
+            carModels = new AsyncTask<Object, Object, ArrayList<CarModel>>() {
+                @Override
+                protected ArrayList<CarModel> doInBackground(Object... params) {
+                    try {
+                        return db_manager.getCarModels();
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return null;
+                    }
+                }
+            }.execute().get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         findViews();
         setCarValues();
     }
@@ -54,10 +83,26 @@ public class AddCar extends Activity implements View.OnClickListener {
     void setCarValues() {
         carID = getIntent().getIntExtra(CarRentConst.CarConst.CAR_ID, -1);
         if (carID >= 0) {
-            car = db_manager.getCar(carID);
-            // branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
-            // carModelsSpinner.setSelection(car.getModelCode());
-            button.setText(getString(R.string.buttonUpdate));
+            new AsyncTask<Integer, Object, Car>() {
+                @Override
+                protected void onPostExecute(Car o) {
+                    if (o == null) return;
+                    car = o;
+                    // branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
+                    // carModelsSpinner.setSelection(car.getModelCode());
+                    button.setText(getString(R.string.buttonUpdate));
+                }
+
+                @Override
+                protected Car doInBackground(Integer... params) {
+                    try {
+                        return db_manager.getCar(carID);
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return null;
+                    }
+                }
+            }.execute(carID);
         }
     }
 
@@ -68,26 +113,27 @@ public class AddCar extends Activity implements View.OnClickListener {
 
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
-            if (db_manager.updateCar(CarRentConst.carToContentValues(car)))
-                Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage), Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-//            new AsyncTask<Object, Object, Boolean>() {
-//                @Override
-//                protected void onPostExecute(Boolean idResult) {
-//                    super.onPostExecute(idResult);
-//                    if (idResult)
-//                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage), Toast.LENGTH_SHORT).show();
-//                    else
-//                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-//
-//                }
-//
-//                @Override
-//                protected Boolean doInBackground(Object... params) {
-//                    return db_manager.updateCar(CarRentConst.carToContentValues(car));
-//                }
-//            }.execute();
+
+            new AsyncTask<Car, Object, Boolean>() {
+                @Override
+                protected void onPostExecute(Boolean idResult) {
+                    if (idResult)
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                protected Boolean doInBackground(Car... params) {
+                    try {
+                        return db_manager.updateCar(CarRentConst.carToContentValues(params[0]));
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                }
+            }.execute(car);
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -99,28 +145,34 @@ public class AddCar extends Activity implements View.OnClickListener {
             if (branchesSpinner.getSelectedItem() == null || carModelsSpinner.getSelectedItem() == null)
                 throw new Exception(getString(R.string.exceptionEmptyFileds));
 
-            final Car car = new Car();
+            Car car = new Car();
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
-            Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + db_manager.addCar(CarRentConst.carToContentValues(car)), Toast.LENGTH_SHORT).show();
-            resetEditText();
 
-//            new AsyncTask<Object, Object, Integer>() {
-//                @Override
-//                protected void onPostExecute(Integer idResult) {
-//                    super.onPostExecute(idResult);
-//                    resetEditText();
-//                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + idResult, Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                protected Integer doInBackground(Object... params) {
-//                    return db_manager.addCar(CarRentConst.carToContentValues(car));
-//                }
-//            }.execute();
+            new AsyncTask<Car, Object, Integer>() {
+                @Override
+                protected void onPostExecute(Integer idResult) {
+                    if (idResult > 0) {
+                        resetEditText();
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + idResult, Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage), Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                protected Integer doInBackground(Car... params) {
+                    try {
+                        return db_manager.addCar(CarRentConst.carToContentValues(params[0]));
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return -1;
+                    }
+                }
+            }.execute(car);
 
         } catch (Exception e) {
-            Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

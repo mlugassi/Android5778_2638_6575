@@ -1,4 +1,4 @@
-package lugassi.wallach.android5778_2638_6575.model.entities;
+package lugassi.wallach.android5778_2638_6575.model.entities.Enums;
 
 public enum Company {
     AlfaRomeo , Audi , BMW , Chevrolet ,Citroen , Daihatsu,

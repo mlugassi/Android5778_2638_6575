@@ -15,6 +15,7 @@ import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
+import lugassi.wallach.android5778_2638_6575.model.entities.Promotion;
 
 public class AddUser extends Activity implements View.OnClickListener {
 
@@ -70,35 +71,36 @@ public class AddUser extends Activity implements View.OnClickListener {
                 return;
             final String userName = userNameEditText.getText().toString();
             final String password = passwordEditText.getText().toString();
+            new AsyncTask<Object, Object, Boolean>() {
+                @Override
+                protected void onPostExecute(Boolean aBoolean) {
+                    super.onPostExecute(aBoolean);
+                    if (aBoolean) {
+                        Intent intent = new Intent(AddUser.this, ManageActivity.class);
+                        finish();
+                        AddUser.this.startActivity(intent);
+                    } else
+                        Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage), Toast.LENGTH_SHORT).show();
 
-            if (db_manager.createAdmin(userName, password, customerID)) {
-                Intent intent = new Intent(AddUser.this, ManageActivity.class);
-                finish();
-                AddUser.this.startActivity(intent);
-            }
-//            new AsyncTask<Object, Object, Boolean>() {
-//                @Override
-//                protected void onPostExecute(Boolean aBoolean) {
-//                    super.onPostExecute(aBoolean);
-//                    if(aBoolean)
-//                    {
-//                        Intent intent = new Intent(AddUser.this , ManageActivity.class);
-//                        finish();
-//                        AddUser.this.startActivity(intent);
-//                    }
-//                }
-//
-//                @Override
-//                protected Boolean doInBackground(Object... params) {
-//                    return db_manager.createAdmin(userName, password , customerID);
-//                }
-//            }.execute();
+                }
+
+                @Override
+                protected Boolean doInBackground(Object... params) {
+                    boolean pRes = false;
+                    try {
+                        pRes = db_manager.createAdmin(userName, password, customerID);
+                        return db_manager.addPromotion(CarRentConst.promotionToContentValues(new Promotion(customerID))) && pRes;
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                }
+            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -106,6 +108,4 @@ public class AddUser extends Activity implements View.OnClickListener {
             addUser();
         }
     }
-
-
 }

@@ -37,6 +37,7 @@
     <string name="textCarDetails">Car Details</string>
     <string name="textName">Name: </string>
     <string name="textID">ID : </string>
+    <string name="textSuccessUpdateCustomerMessage">Update Your Details</string>
     <string name="textDialogTitle">Edit Item</string>
     <string name="textDialogMessage">Choose To Update Or Remove Item</string>
     <string name="textSuccessAddBranchMessage">Add Branch Id: </string>
@@ -78,7 +79,8 @@
     <string name="buttonAddCar">Add Car</string>
     <string name="buttonAddCArModel">Add Car Model</string>
     <string name="buttonManage">Manage</string>
-    <string name="buttonSettings">Settings</string>
+    <string name="buttonMyProfile">My Profile</string>
+    <string name="buttonLogout">Logout</string>
     <string name="buttonLogin">Login</string>
     <string name="buttonUserSettings">User Settings</string>
     <string name="buttonPersonalSettings">Personal Settings</string>

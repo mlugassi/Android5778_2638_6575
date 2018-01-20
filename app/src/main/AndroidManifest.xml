@@ -27,7 +27,6 @@
         <activity android:name=".controller.ManageActivity" />
         <activity android:name=".controller.AddCustomer" />
         <activity android:name=".controller.AddUser" />
-        <activity android:name=".controller.Settings"></activity>
     </application>
 
 </manifest>

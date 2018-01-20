@@ -17,19 +17,19 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
 import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
-import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
 import lugassi.wallach.android5778_2638_6575.model.entities.Customer;
-import lugassi.wallach.android5778_2638_6575.model.entities.Gender;
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.Gender;
 
 public class AddCustomer extends Activity implements View.OnClickListener {
 
+    private int customerID;
+    private Customer customer;
     private DB_manager db_manager;
     private EditText firstNameEditText;
     private EditText familyNameEditText;
@@ -48,7 +48,6 @@ public class AddCustomer extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_customer);
-        db_manager = DBManagerFactory.getManager();
         myCalendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -62,8 +61,9 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             }
 
         };
-
+        db_manager = DBManagerFactory.getManager();
         findViews();
+        setCustomerValues();
     }
 
     private void updateLabel() {
@@ -87,6 +87,52 @@ public class AddCustomer extends Activity implements View.OnClickListener {
         genderSpinner.setAdapter(new ArrayAdapter<Gender>(this, android.R.layout.simple_spinner_item, Gender.values()));
         button.setOnClickListener(this);
         birthDayEditText.setOnClickListener(this);
+    }
+
+    // set customer details for option to be called to update specific branch
+    void setCustomerValues() {
+        customerID = getIntent().getIntExtra(CarRentConst.CustomerConst.CUSTOMER_ID, -1);
+        if (customerID >= 0) {
+            new AsyncTask<Integer, Object, Customer>() {
+                @Override
+                protected void onPostExecute(Customer o) {
+                    if (o == null) return;
+                    customer = o;
+                    firstNameEditText.setText(customer.getFirstName());
+                    familyNameEditText.setText(customer.getFamilyName());
+                    customerIDEditText.setText(((Integer) customer.getCustomerID()).toString());
+                    phoneEditText.setText(customer.getPhoneString());
+                    emailEditText.setText(customer.getEmail());
+                    creditCardEditText.setText(((Long) customer.getCreditCard()).toString());
+                    birthDayEditText.setText(customer.getBirthDayString());
+                    button.setText(getString(R.string.buttonUpdate));
+                    customerIDEditText.setVisibility(View.GONE);
+                }
+
+                @Override
+                protected Customer doInBackground(Integer... params) {
+                    try {
+                        return db_manager.getCustomer(customerID);
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return null;
+
+                    }
+                }
+            }.execute(customerID);
+
+        } else resetInput();
+    }
+
+    private void resetInput() {
+        firstNameEditText.setText("");
+        familyNameEditText.setText("");
+        customerIDEditText.setText("");
+        phoneEditText.setText("");
+        emailEditText.setText("");
+        creditCardEditText.setText("");
+        birthDayEditText.setText("");
+        customer = null;
     }
 
     private boolean checkValues() {
@@ -124,38 +170,6 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     }
 
     private void updateCustomer() {
-//        try {
-//            if (!checkValues())
-//                return;
-//            int maxParkingSpace = Integer.parseInt(parkingSpaceEditText.getText().toString());
-//
-//            branch.setAddress(addressEditText.getText().toString());
-//            branch.setMaxParkingSpace(maxParkingSpace);
-//            branch.setCity(cityEditText.getText().toString());
-//            branch.setBranchName(nameEditText.getText().toString());
-//
-//            new AsyncTask<Object, Object, Boolean>() {
-//                @Override
-//                protected void onPostExecute(Boolean idResult) {
-//                    super.onPostExecute(idResult);
-//                    if (idResult)
-//                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
-//                    else
-//                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                protected Boolean doInBackground(Object... params) {
-//                    return db_manager.updateBranch(branch.getBranchID(), CarRentConst.branchToContentValues(branch));
-//                }
-//            }.execute();
-//
-//        } catch (Exception e) {
-//            Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-    }
-
-    private void addCustomer() {
         try {
             if (!checkValues())
                 return;
@@ -163,7 +177,50 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             int phone = Integer.parseInt(phoneEditText.getText().toString());
             long creditCard = Long.parseLong(creditCardEditText.getText().toString());
 
-            String x = birthDayEditText.getText().toString();
+            customer.setFirstName(firstNameEditText.getText().toString());
+            customer.setFamilyName(familyNameEditText.getText().toString());
+            customer.setCustomerID(customerID);
+            customer.setPhone(phone);
+            customer.setEmail(emailEditText.getText().toString());
+            customer.setCreditCard(creditCard);
+            customer.setGender((Gender) genderSpinner.getSelectedItem());
+            customer.setBirthDay(birthDayEditText.getText().toString());
+
+            new AsyncTask<Object, Object, Boolean>() {
+                @Override
+                protected void onPostExecute(Boolean idResult) {
+                    super.onPostExecute(idResult);
+                    if (idResult)
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCustomerMessage), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                protected Boolean doInBackground(Object... params) {
+                    try {
+                        return db_manager.updateCustomer(CarRentConst.customerToContentValues(customer));
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return false;
+
+                    }
+                }
+            }.execute();
+
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addCustomer() {
+        try {
+            if (!checkValues())
+                return;
+            final int customerID = Integer.parseInt(customerIDEditText.getText().toString());
+            int phone = Integer.parseInt(phoneEditText.getText().toString());
+            long creditCard = Long.parseLong(creditCardEditText.getText().toString());
+
             final Customer customer = new Customer();
             customer.setFirstName(firstNameEditText.getText().toString());
             customer.setFamilyName(familyNameEditText.getText().toString());
@@ -173,29 +230,33 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             customer.setCreditCard(creditCard);
             customer.setGender((Gender) genderSpinner.getSelectedItem());
             customer.setBirthDay(birthDayEditText.getText().toString());
-            int idResult = db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
-            Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddCustomer.this, AddUser.class);
-            intent.putExtra(CarRentConst.UserConst.USER_ID, idResult);
-            finish();
-            startActivity(intent);
-//            new AsyncTask<Object, Object, Integer>() {
-//                @Override
-//                protected void onPostExecute(Integer idResult) {
-//                    super.onPostExecute(idResult);
-//                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(AddCustomer.this, AddUser.class);
-//                    intent.putExtra(CarRentConst.UserConst.USER_ID, idResult);
-//                    finish();
-//                    startActivity(intent);
-//                }
-//
-//                @Override
-//                protected Integer doInBackground(Object... params) {
-//                    return db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
-//
-//                }
-//            }.execute();
+
+            new AsyncTask<Object, Object, Integer>() {
+                @Override
+                protected void onPostExecute(Integer idResult) {
+                    if (idResult < 0)
+                        Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage), Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCustomerMessage) + idResult, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AddCustomer.this, AddUser.class);
+                    intent.putExtra(CarRentConst.UserConst.USER_ID, idResult);
+                    finish();
+                    startActivity(intent);
+                }
+
+                @Override
+                protected Integer doInBackground(Object... params) {
+                    int id = 0;
+                    try {
+                        id = db_manager.addCustomer(CarRentConst.customerToContentValues(customer));
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return -1;
+                    }
+                    return id;
+
+                }
+            }.execute();
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -205,15 +266,13 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == button) {
-            addCustomer();
-        }
-        if (v == birthDayEditText) {
-            // TODO Auto-generated method stub
+            if (customerID == -1) addCustomer();
+            else updateCustomer();
+        } else if (v == birthDayEditText) {
             new DatePickerDialog(AddCustomer.this, date, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         }
     }
-
-
 }
+

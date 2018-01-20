@@ -1,18 +1,24 @@
 package lugassi.wallach.android5778_2638_6575.controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
 import lugassi.wallach.android5778_2638_6575.model.backend.DB_manager;
+import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
 
 public class Login extends Activity implements View.OnClickListener {
 
@@ -28,10 +34,46 @@ public class Login extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
-        db_manager = DBManagerFactory.getManager();
-        findViews();
+        try {
+            db_manager = DBManagerFactory.getManager();
+            checkSharedPreferences();
+            findViews();
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
+    private void checkSharedPreferences() {
+        final String username = getDefaults(CarRentConst.UserConst.USER_NAME, this);
+        if (!username.equals("")) {
+            String password = getDefaults(CarRentConst.UserConst.PASSWORD, this);
+            new AsyncTask<String, Object, String>() {
+                @Override
+                protected void onPostExecute(String result) {
+                    if (result.contains("Success")) {
+                        Intent intent = new Intent(Login.this, ManageActivity.class);
+                        result = result.substring("Success Login:".length(), result.length() - 1);
+                        intent.putExtra(CarRentConst.CustomerConst.CUSTOMER_ID, Integer.parseInt(result));
+                        intent.putExtra(CarRentConst.UserConst.USER_NAME, username);
+
+                        finish();
+                        Login.this.startActivity(intent);
+                    }
+                }
+
+                @Override
+                protected String doInBackground(String... params) {
+                    String result = null;
+                    try {
+                        result = db_manager.checkAdmin(params[0], params[1]);
+                    } catch (Exception e) {
+                        return e.getMessage();
+                    }
+                    return result;
+                }
+            }.execute(username, password);
+        }
+    }
 
     private void findViews() {
         userNameEditText = (EditText) findViewById(R.id.userNameEditText);
@@ -62,19 +104,39 @@ public class Login extends Activity implements View.OnClickListener {
 
 
     void login() {
-        if(!checkValues())
+        if (!checkValues())
             return;
-        Intent intent = new Intent(Login.this, ManageActivity.class);
-        String result = db_manager.checkAdmin(userNameEditText.getText().toString(), passwordEditText.getText().toString());
-        if(result.contains("Success")) {
-            finish();
-            Login.this.startActivity(intent);
-        }
-        else
-        {
-            errorTextView.setText(result);
-            errorTextView.setVisibility(View.VISIBLE);
-        }
+        new AsyncTask<String, Object, String>() {
+            @Override
+            protected void onPostExecute(String result) {
+                if (result.contains("Success")) {
+                    setDefaults(CarRentConst.UserConst.USER_NAME, userNameEditText.getText().toString(), Login.this);
+                    setDefaults(CarRentConst.UserConst.PASSWORD, passwordEditText.getText().toString(), Login.this);
+                    Intent intent = new Intent(Login.this, ManageActivity.class);
+                    result = result.substring("Success Login:".length(), result.length() - 1);
+                    intent.putExtra(CarRentConst.CustomerConst.CUSTOMER_ID, Integer.parseInt(result));
+                    intent.putExtra(CarRentConst.UserConst.USER_NAME, userNameEditText.getText().toString());
+
+                    finish();
+                    Login.this.startActivity(intent);
+                } else {
+                    errorTextView.setText(result);
+                    errorTextView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String result = null;
+                try {
+                    result = db_manager.checkAdmin(params[0], params[1]);
+                } catch (Exception e) {
+                    result = e.getMessage();
+                }
+                return result;
+            }
+        }.execute(userNameEditText.getText().toString(), passwordEditText.getText().toString());
+
     }
 
     void signup() {
@@ -84,12 +146,27 @@ public class Login extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == loginButton)
-            login();
-        else
+        if (v == loginButton) {
+            try {
+                login();
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } else
             signup();
 
     }
 
+    public static void setDefaults(String key, String value, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getDefaults(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, "");
+    }
 
 }

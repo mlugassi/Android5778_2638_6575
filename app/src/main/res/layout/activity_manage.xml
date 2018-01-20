@@ -5,24 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="lugassi.wallach.android5778_2638_6575.controller.ManageActivity">
+
     <ScrollView
-        android:background="@color/White"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:background="@color/White">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <Button
                 android:id="@+id/add_branch_activity_button"
-                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
-                android:textColor="@color/Black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddBranch" />
+                android:text="@string/buttonAddBranch"
+                android:textColor="@color/Black" />
 
             <Button
                 android:id="@+id/add_carModel_activity_button"
@@ -38,39 +42,51 @@
 
             <Button
                 android:id="@+id/add_car_activity_button"
-                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
-                android:textColor="@color/Black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddCar" />
+                android:text="@string/buttonAddCar"
+                android:textColor="@color/Black" />
 
             <Button
-                android:id="@+id/show_branch_activity_button"
-                android:layout_marginTop="10dp"
+                android:id="@+id/dataListsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
-                android:textColor="@color/Black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonManage" />
+                android:text="@string/buttonManage"
+                android:textColor="@color/Black" />
 
             <Button
-                android:id="@+id/settingsButton"
-                android:layout_marginTop="10dp"
+                android:id="@+id/myProfileButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_shape"
-                android:textColor="@color/Black"
+                android:text="@string/buttonMyProfile"
+                android:textColor="@color/Black" />
+
+            <Button
+                android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/buttonSettings" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_shape"
+                android:text="@string/buttonLogout"
+                android:textColor="@color/Black" />
 
         </LinearLayout>
 

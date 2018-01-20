@@ -4,19 +4,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
@@ -35,6 +37,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     private MyListAdapter branchesAdapter;
     private MyListAdapter carsAdapter;
     private MyListAdapter carModelsAdapter;
+    private boolean onCreate = false;
 
 
     @Override
@@ -42,71 +45,147 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_data_lists);
+        onCreate = true;
         db_manager = DBManagerFactory.getManager();
-        branchesAdapter = new MyListAdapter(DataLists.this, db_manager.getBranches()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.branch_list_view, null);
-
-                TextView nameAnIdTextView = (TextView) convertView.findViewById(R.id.nameAndIdEditText);
-                TextView addressTextView = (TextView) convertView.findViewById(R.id.addressEditText);
-
-                Branch branch = db_manager.getBranches().get(position);
-                nameAnIdTextView.setText(((Integer) branch.getBranchID()).toString() + " " + branch.getBranchName());
-                addressTextView.setText(branch.getAddress());
-
-                return convertView;
-            }
-        };
-        carsAdapter = new MyListAdapter(DataLists.this, db_manager.getCars()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.car_list_view, null);
-
-                TextView carIdEditText = (TextView) convertView.findViewById(R.id.carIdEditText);
-                TextView modelNameAndCompanyEditText = (TextView) convertView.findViewById(R.id.modelNameAndCompanyEditText);
-                TextView branchNameEditText = (TextView) convertView.findViewById(R.id.branchNameEditText);
 
 
-                Car car = db_manager.getCars().get(position);
-                String branchName = "", modelName = "", companyName = "";
-                for (Branch branch : db_manager.getBranches())
-                    if (branch.getBranchID() == car.getBranchID())
-                        branchName = branch.getBranchName();
-                for (CarModel carModel : db_manager.getCarModels())
-                    if (carModel.getModelCode() == car.getModelCode()) {
-                        modelName = carModel.getModelName();
-                        companyName = carModel.getCompany().name();
+        try {
+            final ArrayList<Branch> branches = new AsyncTask<Object, Object, ArrayList<Branch>>() {
+                @Override
+                protected ArrayList<Branch> doInBackground(Object... params) {
+                    try {
+                        return db_manager.getBranches();
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return new ArrayList<Branch>();
                     }
+                }
+            }.execute().get();
+            final ArrayList<Car> cars = new AsyncTask<Object, Object, ArrayList<Car>>() {
+                @Override
+                protected ArrayList<Car> doInBackground(Object... params) {
+                    try {
+                        return db_manager.getCars();
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return new ArrayList<Car>();
+                    }
+                }
+            }.execute().get();
+            final ArrayList<CarModel> carModels = new AsyncTask<Object, Object, ArrayList<CarModel>>() {
+                @Override
+                protected ArrayList<CarModel> doInBackground(Object... params) {
+                    try {
+                        return db_manager.getCarModels();
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return new ArrayList<CarModel>();
+                    }
+                }
+            }.execute().get();
 
-                carIdEditText.setText(((Integer) car.getCarID()).toString());
-                modelNameAndCompanyEditText.setText(modelName + ", " + companyName);
-                branchNameEditText.setText(branchName);
+            carModelsAdapter = new MyListAdapter(DataLists.this, carModels) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
 
-                return convertView;
-            }
-        };
-        carModelsAdapter = new MyListAdapter(DataLists.this, db_manager.getCarModels()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+                    if (convertView == null)
+                        convertView = View.inflate(DataLists.this, R.layout.car_model_list_view, null);
 
-                if (convertView == null)
-                    convertView = View.inflate(DataLists.this, R.layout.car_model_list_view, null);
+                    TextView carModelTextView = (TextView) convertView.findViewById(R.id.modelCodeEditText);
+                    TextView nameAndCompanyEditText = (TextView) convertView.findViewById(R.id.nameAndCompanyEditText);
 
-                TextView carModelTextView = (TextView) convertView.findViewById(R.id.modelCodeEditText);
-                TextView nameAndCompanyEditText = (TextView) convertView.findViewById(R.id.nameAndCompanyEditText);
+                    final CarModel carModel = (CarModel) carModels.get(position);
+                    carModelTextView.setText(((Integer) carModel.getModelCode()).toString());
+                    nameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
 
-                CarModel carModel = db_manager.getCarModels().get(position);
-                carModelTextView.setText(((Integer) carModel.getModelCode()).toString());
-                nameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
+                    return convertView;
+                }
+            };
+            carModelsAdapter.setData(carModels);
+            carModelsAdapter.notifyDataSetChanged();
+            branchesAdapter = new MyListAdapter(DataLists.this, branches) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
 
-                return convertView;
-            }
-        };
+                    if (convertView == null)
+                        convertView = View.inflate(DataLists.this, R.layout.branch_list_view, null);
+
+                    TextView nameAnIdTextView = (TextView) convertView.findViewById(R.id.nameAndIdEditText);
+                    TextView addressTextView = (TextView) convertView.findViewById(R.id.addressEditText);
+
+                    Branch branch = (Branch) branches.get(position);
+                    nameAnIdTextView.setText(branch.getBranchName());
+                    addressTextView.setText(branch.getAddress());
+
+                    return convertView;
+                }
+            };
+            branchesAdapter.setData(branches);
+            branchesAdapter.notifyDataSetChanged();
+            carsAdapter = new MyListAdapter<Car>(DataLists.this, cars) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+
+                    if (convertView == null)
+                        convertView = View.inflate(DataLists.this, R.layout.car_list_view, null);
+
+                    TextView carIdEditText = (TextView) convertView.findViewById(R.id.carIdEditText);
+                    final TextView modelNameAndCompanyEditText = (TextView) convertView.findViewById(R.id.modelNameAndCompanyEditText);
+                    final TextView branchNameEditText = (TextView) convertView.findViewById(R.id.branchNameEditText);
+
+
+                    final Car car = (Car) cars.get(position);
+                    carIdEditText.setText(((Integer) car.getCarID()).toString());
+                    new AsyncTask<Integer, Object, String>() {
+                        @Override
+                        protected void onPostExecute(String branchName) {
+                            if (branchName != null)
+                                branchNameEditText.setText(branchName);
+                        }
+
+                        @Override
+                        protected String doInBackground(Integer... params) {
+                            try {
+                                return db_manager.getBranch(params[0]).getBranchName();
+                            } catch (Exception e) {
+                                Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                return null;
+                            }
+                        }
+                    }.execute(car.getBranchID());
+
+                    new AsyncTask<Integer, Object, CarModel>() {
+                        @Override
+                        protected void onPostExecute(final CarModel carModel) {
+                            if (carModel == null) return;
+                            modelNameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
+                        }
+
+                        @Override
+                        protected CarModel doInBackground(Integer... params) {
+                            try {
+                                return db_manager.getCarModel(params[0]);
+                            } catch (Exception e) {
+                                Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                return null;
+                            }
+                        }
+                    }.execute(car.getModelCode());
+
+
+                    return convertView;
+                }
+
+            };
+            carsAdapter.setData(cars);
+            carsAdapter.notifyDataSetChanged();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         findViews();
         resetInput();
     }
@@ -114,12 +193,151 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     @Override
     protected void onResume() {
         super.onResume();
-        branchesAdapter.setData(db_manager.getBranches());
-        branchesAdapter.notifyDataSetChanged();
-        carModelsAdapter.setData(db_manager.getCarModels());
-        carModelsAdapter.notifyDataSetChanged();
-        carsAdapter.setData(db_manager.getCars());
-        carsAdapter.notifyDataSetChanged();
+        if (!onCreate) {
+            try {
+                final ArrayList<Branch> branches = new AsyncTask<Object, Object, ArrayList<Branch>>() {
+                    @Override
+                    protected ArrayList<Branch> doInBackground(Object... params) {
+                        try {
+                            return db_manager.getBranches();
+                        } catch (Exception e) {
+                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            return new ArrayList<Branch>();
+                        }
+                    }
+                }.execute().get();
+                final ArrayList<Car> cars = new AsyncTask<Object, Object, ArrayList<Car>>() {
+                    @Override
+                    protected ArrayList<Car> doInBackground(Object... params) {
+                        try {
+                            return db_manager.getCars();
+                        } catch (Exception e) {
+                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            return new ArrayList<Car>();
+                        }
+                    }
+                }.execute().get();
+                final ArrayList<CarModel> carModels = new AsyncTask<Object, Object, ArrayList<CarModel>>() {
+                    @Override
+                    protected ArrayList<CarModel> doInBackground(Object... params) {
+                        try {
+                            return db_manager.getCarModels();
+                        } catch (Exception e) {
+                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            return new ArrayList<CarModel>();
+                        }
+                    }
+                }.execute().get();
+
+                carModelsAdapter = new MyListAdapter(DataLists.this, carModels) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+
+                        if (convertView == null)
+                            convertView = View.inflate(DataLists.this, R.layout.car_model_list_view, null);
+
+                        TextView carModelTextView = (TextView) convertView.findViewById(R.id.modelCodeEditText);
+                        TextView nameAndCompanyEditText = (TextView) convertView.findViewById(R.id.nameAndCompanyEditText);
+
+                        final CarModel carModel = (CarModel) carModels.get(position);
+                        carModelTextView.setText(((Integer) carModel.getModelCode()).toString());
+                        nameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
+
+                        return convertView;
+                    }
+                };
+                carModelsAdapter.setData(carModels);
+                carModelsAdapter.notifyDataSetChanged();
+                branchesAdapter = new MyListAdapter(DataLists.this, branches) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+
+                        if (convertView == null)
+                            convertView = View.inflate(DataLists.this, R.layout.branch_list_view, null);
+
+                        TextView nameAnIdTextView = (TextView) convertView.findViewById(R.id.nameAndIdEditText);
+                        TextView addressTextView = (TextView) convertView.findViewById(R.id.addressEditText);
+
+                        Branch branch = (Branch) branches.get(position);
+                        nameAnIdTextView.setText(branch.getBranchName());
+                        addressTextView.setText(branch.getAddress());
+
+                        return convertView;
+                    }
+                };
+                branchesAdapter.setData(branches);
+                branchesAdapter.notifyDataSetChanged();
+                carsAdapter = new MyListAdapter<Car>(DataLists.this, cars) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+
+                        if (convertView == null)
+                            convertView = View.inflate(DataLists.this, R.layout.car_list_view, null);
+
+                        TextView carIdEditText = (TextView) convertView.findViewById(R.id.carIdEditText);
+                        final TextView modelNameAndCompanyEditText = (TextView) convertView.findViewById(R.id.modelNameAndCompanyEditText);
+                        final TextView branchNameEditText = (TextView) convertView.findViewById(R.id.branchNameEditText);
+
+
+                        final Car car = (Car) cars.get(position);
+                        carIdEditText.setText(((Integer) car.getCarID()).toString());
+                        new AsyncTask<Integer, Object, String>() {
+                            @Override
+                            protected void onPostExecute(String branchName) {
+                                if (branchName != null)
+                                    branchNameEditText.setText(branchName);
+                            }
+
+                            @Override
+                            protected String doInBackground(Integer... params) {
+                                try {
+                                    return db_manager.getBranch(params[0]).getBranchName();
+                                } catch (Exception e) {
+                                    Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    return null;
+                                }
+                            }
+                        }.execute(car.getBranchID());
+
+                        new AsyncTask<Integer, Object, CarModel>() {
+                            @Override
+                            protected void onPostExecute(final CarModel carModel) {
+                                if (carModel == null) return;
+                                modelNameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
+                            }
+
+                            @Override
+                            protected CarModel doInBackground(Integer... params) {
+                                try {
+                                    return db_manager.getCarModel(params[0]);
+                                } catch (Exception e) {
+                                    Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    return null;
+                                }
+                            }
+                        }.execute(car.getModelCode());
+
+
+                        return convertView;
+                    }
+
+                };
+                carsAdapter.setData(cars);
+                carsAdapter.notifyDataSetChanged();
+                if (dataSpinner.getSelectedItemPosition() == 0)
+                    dataListView.setAdapter((ListAdapter) branchesAdapter);
+                else if (dataSpinner.getSelectedItemPosition() == 1)
+                    dataListView.setAdapter((ListAdapter) carsAdapter);
+                else if (dataSpinner.getSelectedItemPosition() == 2)
+                    dataListView.setAdapter((ListAdapter) carModelsAdapter);
+                else dataListView.setAdapter(null);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void findViews() {
@@ -188,31 +406,137 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 }
                 Intent myIntent = new Intent(DataLists.this, nxtActivity);
                 myIntent.putExtra(ID, id);
+                onCreate = false;
                 DataLists.this.startActivity(myIntent);
             }
         });
         builder.setNegativeButton(getString(R.string.buttonRemove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (dataSpinner.getSelectedItemPosition()) {
-                    case 0:
-                        db_manager.removeBranch(((Branch) dataListView.getItemAtPosition(position)).getBranchID());
-                        break;
-                    case 1:
-                        db_manager.removeCar(((Car) dataListView.getItemAtPosition(position)).getCarID());
-                        break;
-                    case 2:
-                        db_manager.removeCarModel(((CarModel) dataListView.getItemAtPosition(position)).getModelCode());
-                        break;
-                    default:
-                        return;
+                try {
+                    switch (dataSpinner.getSelectedItemPosition()) {
+                        case 0:
+                            new AsyncTask<Integer, Object, ArrayList<Branch>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<Branch> branches) {
+                                    branchesAdapter.setData(branches);
+                                    branchesAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<Branch> doInBackground(Integer... params) {
+                                    try {
+                                        db_manager.removeBranch(params[0]);
+                                        return db_manager.getBranches();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<Branch>();
+                                    }
+                                }
+                            }.execute(((Branch) dataListView.getItemAtPosition(position)).getBranchID());
+                            new AsyncTask<Integer, Object, ArrayList<Car>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<Car> cars) {
+                                    carsAdapter.setData(cars);
+                                    carsAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<Car> doInBackground(Integer... params) {
+                                    try {
+                                        return db_manager.getCars();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<Car>();
+                                    }
+                                }
+                            }.execute();
+                            new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<CarModel> carModels) {
+                                    carModelsAdapter.setData(carModels);
+                                    carModelsAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<CarModel> doInBackground(Integer... params) {
+                                    try {
+                                        return db_manager.getCarModels();
+                                    } catch (Exception e) {
+                                        Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<CarModel>();
+                                    }
+                                }
+                            }.execute();
+
+                            break;
+                        case 1:
+                            new AsyncTask<Integer, Object, ArrayList<Car>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<Car> cars) {
+                                    carsAdapter.setData(cars);
+                                    carsAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<Car> doInBackground(Integer... params) {
+                                    try {
+                                        db_manager.removeCar(params[0]);
+                                        return db_manager.getCars();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<Car>();
+                                    }
+                                }
+                            }.execute(((Car) dataListView.getItemAtPosition(position)).getCarID());
+
+                            break;
+                        case 2:
+                            new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<CarModel> carModels) {
+                                    carModelsAdapter.setData(carModels);
+                                    carModelsAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<CarModel> doInBackground(Integer... params) {
+                                    try {
+                                        db_manager.removeCarModel(params[0]);
+                                        return db_manager.getCarModels();
+                                    } catch (Exception e) {
+                                        Toast.makeText(DataLists.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<CarModel>();
+                                    }
+                                }
+                            }.execute(((CarModel) dataListView.getItemAtPosition(position)).getModelCode());
+                            new AsyncTask<Integer, Object, ArrayList<Car>>() {
+                                @Override
+                                protected void onPostExecute(ArrayList<Car> cars) {
+                                    carsAdapter.setData(cars);
+                                    carsAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                protected ArrayList<Car> doInBackground(Integer... params) {
+                                    try {
+                                        return db_manager.getCars();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        return new ArrayList<Car>();
+                                    }
+                                }
+                            }.execute();
+
+                            break;
+                    }
+                } catch (Exception e) {
+
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+
                 }
-                branchesAdapter.setData(db_manager.getBranches());
-                branchesAdapter.notifyDataSetChanged();
-                carModelsAdapter.setData(db_manager.getCarModels());
-                carModelsAdapter.notifyDataSetChanged();
-                carsAdapter.setData(db_manager.getCars());
-                carsAdapter.notifyDataSetChanged();
+
+
             }
         });
         builder.show();

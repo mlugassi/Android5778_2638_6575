@@ -1,6 +1,8 @@
 package lugassi.wallach.android5778_2638_6575.model.entities;
 
-import android.graphics.Color;
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.CarType;
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.Company;
+import lugassi.wallach.android5778_2638_6575.model.entities.Enums.EngineCapacity;
 
 public class CarModel {
     private static int modelCodeSerializer = 1;
@@ -10,7 +12,7 @@ public class CarModel {
     private EngineCapacity engineCapacity;
     private int seats;
     private CarType carType;
-   // private Color color;
+    // private Color color;
     private int maxGasTank;
 
     public CarModel() {
