@@ -49,7 +49,6 @@ public class AddCarModel extends Activity implements View.OnClickListener {
         engineCapacitySpinner = (Spinner) findViewById(R.id.engineCapacitySpinner);
         seatsEditText = (EditText) findViewById(R.id.seatsEditText);
         carTypeSpinner = (Spinner) findViewById(R.id.carTypeSpinner);
-        //     colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         maxGasEditText = (EditText) findViewById(R.id.maxGasEditText);
         button = (Button) findViewById(R.id.button);
 
@@ -114,22 +113,37 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             seatsEditText.setError(getString(R.string.exceptionEmptyFileds));
             return false;
         }
+        if (!tryParseInt(seatsEditText.getText().toString())) {
+            seatsEditText.setError(getString(R.string.exceptionNumberFileds));
+            return false;
+        }
+        if (Integer.parseInt(seatsEditText.getText().toString()) < 2) {
+            seatsEditText.setError(getString(R.string.exceptionLessFileds) + " " + 2);
+            return false;
+        }
+        if (Integer.parseInt(seatsEditText.getText().toString()) > 56) {
+            seatsEditText.setError(getString(R.string.exceptionMoreFileds) + " " + 56);
+            return false;
+        }
         if (TextUtils.isEmpty(maxGasEditText.getText().toString())) {
             maxGasEditText.setError(getString(R.string.exceptionEmptyFileds));
             return false;
         }
-//
-//        if (Integer.parseInt(seatsEditText.getText().toString()) < 2) {
-//            seatsEditText.setError(getString(R.string.exceptionInvalidValue));
-//            return false;
-//        }
-//        if (Integer.parseInt(maxGasEditText.getText().toString()) < 30) {
-//            maxGasEditText.setError(getString(R.string.exceptionInvalidValue));
-//            return false;
-//        }
+        if (!tryParseInt(maxGasEditText.getText().toString())) {
+            maxGasEditText.setError(getString(R.string.exceptionNumberFileds));
+            return false;
+        }
+        if (Integer.parseInt(maxGasEditText.getText().toString()) < 100) {
+            maxGasEditText.setError(getString(R.string.exceptionLessFileds) + " " + 100);
+            return false;
+        }
+        if (Integer.parseInt(maxGasEditText.getText().toString()) > 750) {
+            maxGasEditText.setError(getString(R.string.exceptionMoreFileds) + " " + 750);
+            return false;
+        }
+
         if (companySpinner.getSelectedItem() == null ||
                 engineCapacitySpinner.getSelectedItem() == null ||
-                // colorSpinner.getSelectedItem() == null ||
                 carTypeSpinner.getSelectedItem() == null)
             return false;
         return true;
@@ -149,23 +163,21 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
 
-            new AsyncTask<CarModel, Object, Boolean>() {
+            new AsyncTask<CarModel, Object, String>() {
                 @Override
-                protected void onPostExecute(Boolean idResult) {
-                    super.onPostExecute(idResult);
-                    if (idResult)
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0)
                         Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarModelMessage), Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                protected Boolean doInBackground(CarModel... params) {
+                protected String doInBackground(CarModel... params) {
                     try {
                         return db_manager.updateCarModel(CarRentConst.carModelToContentValues(params[0]));
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return false;
+                        return e.getMessage();
                     }
                 }
             }.execute(carModel);
@@ -190,29 +202,37 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
 
-            new AsyncTask<Object, Object, Integer>() {
+            new AsyncTask<Object, Object, String>() {
                 @Override
-                protected void onPostExecute(Integer idResult) {
-                    if (idResult > 0) {
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0) {
                         resetInput();
                         Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddCarModelMessage) + idResult, Toast.LENGTH_SHORT).show();
                     } else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                protected Integer doInBackground(Object... params) {
+                protected String doInBackground(Object... params) {
                     try {
                         return db_manager.addCarModel(CarRentConst.carModelToContentValues(carModel));
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return -1;
+                        return e.getMessage();
                     }
                 }
             }.execute(carModel);
 
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), getString(R.string.textFiledAddMessage) + "\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

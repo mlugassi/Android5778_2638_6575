@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import lugassi.wallach.android5778_2638_6575.R;
 import lugassi.wallach.android5778_2638_6575.model.backend.DBManagerFactory;
@@ -33,6 +32,7 @@ public class AddCar extends Activity implements View.OnClickListener {
     private Button button;
     private Car car;
     private int carID;
+    private String errorMassage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,37 +40,8 @@ public class AddCar extends Activity implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_car);
 
+        errorMassage = null;
         db_manager = DBManagerFactory.getManager();
-        try {
-            branches = new AsyncTask<Object, Object, ArrayList<Branch>>() {
-                @Override
-                protected ArrayList<Branch> doInBackground(Object... params) {
-                    try {
-                        return db_manager.getBranches();
-                    } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return null;
-                    }
-                }
-            }.execute().get();
-
-            carModels = new AsyncTask<Object, Object, ArrayList<CarModel>>() {
-                @Override
-                protected ArrayList<CarModel> doInBackground(Object... params) {
-                    try {
-                        return db_manager.getCarModels();
-                    } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return null;
-                    }
-                }
-            }.execute().get();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
         findViews();
         setCarValues();
     }
@@ -85,11 +56,15 @@ public class AddCar extends Activity implements View.OnClickListener {
         if (carID >= 0) {
             new AsyncTask<Integer, Object, Car>() {
                 @Override
-                protected void onPostExecute(Car o) {
-                    if (o == null) return;
-                    car = o;
-                    // branchesSpinner.setSelection(db_manager.getBranches().indexOf()car.getBranchID());
-                    // carModelsSpinner.setSelection(car.getModelCode());
+                protected void onPostExecute(Car result) {
+                    if (errorMassage != null) {
+                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                        errorMassage = null;
+                    }
+                    if (result == null || branches == null || carModels == null) return;
+                    car = result;
+                    branchesSpinner.setSelection(getIndexByBranchID(result.getBranchID()));
+                    carModelsSpinner.setSelection(getIndexByModelCode(result.getModelCode()));
                     button.setText(getString(R.string.buttonUpdate));
                 }
 
@@ -98,7 +73,7 @@ public class AddCar extends Activity implements View.OnClickListener {
                     try {
                         return db_manager.getCar(carID);
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        errorMassage = e.getMessage();
                         return null;
                     }
                 }
@@ -114,23 +89,22 @@ public class AddCar extends Activity implements View.OnClickListener {
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
 
-            new AsyncTask<Car, Object, Boolean>() {
+            new AsyncTask<Car, Object, String>() {
                 @Override
-                protected void onPostExecute(Boolean idResult) {
-                    if (idResult)
-                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage), Toast.LENGTH_SHORT).show();
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0)
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateCarMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
-                protected Boolean doInBackground(Car... params) {
+                protected String doInBackground(Car... params) {
                     try {
                         return db_manager.updateCar(CarRentConst.carToContentValues(params[0]));
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return false;
+                        return e.getMessage();
                     }
                 }
             }.execute(car);
@@ -149,24 +123,23 @@ public class AddCar extends Activity implements View.OnClickListener {
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
 
-            new AsyncTask<Car, Object, Integer>() {
+            new AsyncTask<Car, Object, String>() {
                 @Override
-                protected void onPostExecute(Integer idResult) {
-                    if (idResult > 0) {
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0) {
                         resetEditText();
-                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + idResult, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textSuccessCreateCarMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
                     } else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textFiledCreateMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
-                protected Integer doInBackground(Car... params) {
+                protected String doInBackground(Car... params) {
                     try {
                         return db_manager.addCar(CarRentConst.carToContentValues(params[0]));
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return -1;
+                        return e.getMessage();
                     }
                 }
             }.execute(car);
@@ -176,84 +149,148 @@ public class AddCar extends Activity implements View.OnClickListener {
         }
     }
 
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     private void findViews() {
         branchesSpinner = (Spinner) findViewById(R.id.branchesSpinner);
         carModelsSpinner = (Spinner) findViewById(R.id.carModelsSpinner);
         button = (Button) findViewById(R.id.createButton);
+        new AsyncTask<Object, Object, ArrayList<Branch>>() {
+            @Override
+            protected void onPostExecute(ArrayList<Branch> result) {
+                if (errorMassage != null) {
+                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                    errorMassage = null;
+                }
+                branches = result;
+                branchesSpinner.setAdapter(new ArrayAdapter<Branch>(AddCar.this, R.layout.spinner_view, branches) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        if (convertView == null)
+                            convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
+
+
+                        TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
+                        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+
+                        Branch branch = (Branch) branchesSpinner.getItemAtPosition(position);
+                        idTextView.setText(((Integer) branch.getBranchID()).toString());
+                        nameTextView.setText(branch.getBranchName());
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+
+                        if (convertView == null)
+                            convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
+
+
+                        TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
+                        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+
+                        Branch branch = (Branch) branchesSpinner.getItemAtPosition(position);
+                        idTextView.setText(((Integer) branch.getBranchID()).toString());
+                        nameTextView.setText(branch.getBranchName());
+
+                        return convertView;
+                    }
+                });
+
+            }
+
+            @Override
+            protected ArrayList<Branch> doInBackground(Object... params) {
+                try {
+                    return db_manager.getBranches();
+                } catch (Exception e) {
+                    errorMassage = e.getMessage();
+                    return new ArrayList<Branch>();
+                }
+            }
+        }.execute();
+
+        new AsyncTask<Object, Object, ArrayList<CarModel>>() {
+            @Override
+            protected void onPostExecute(ArrayList<CarModel> result) {
+                if (errorMassage != null) {
+                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                    errorMassage = null;
+                }
+                carModels = result;
+                carModelsSpinner.setAdapter(new ArrayAdapter<CarModel>(AddCar.this, R.layout.spinner_view, carModels) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        if (convertView == null)
+                            convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
+
+
+                        TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
+                        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+
+                        CarModel carModel = (CarModel) carModelsSpinner.getItemAtPosition(position);
+                        idTextView.setText(carModel.getCompany().name());
+                        nameTextView.setText(carModel.getModelName());
+
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+
+                        if (convertView == null)
+                            convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
+
+
+                        TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
+                        TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
+
+                        CarModel carModel = (CarModel) carModelsSpinner.getItemAtPosition(position);
+                        idTextView.setText(carModel.getCompany().name());
+                        nameTextView.setText(carModel.getModelName());
+
+                        return convertView;
+                    }
+                });
+            }
+
+            @Override
+            protected ArrayList<CarModel> doInBackground(Object... params) {
+                try {
+                    return db_manager.getCarModels();
+                } catch (Exception e) {
+                    errorMassage = e.getMessage();
+                    return new ArrayList<CarModel>();
+                }
+            }
+        }.execute();
 
         button.setOnClickListener(this);
-        carModelsSpinner.setAdapter(new ArrayAdapter<CarModel>(this, R.layout.spinner_view, carModels) {
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
+    }
 
+    private int getIndexByBranchID(int branchID) {
+        if (branches == null) return -1;
+        for (Branch branch : branches)
+            if (branchID == branch.getBranchID())
+                return branches.indexOf(branch);
+        return -1;
+    }
 
-                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
-
-                idTextView.setText(((Integer) carModels.get(position).getModelCode()).toString());
-                nameTextView.setText(carModels.get(position).getModelName());
-
-
-                return convertView;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
-
-
-                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
-
-                idTextView.setText(((Integer) carModels.get(position).getModelCode()).toString());
-                String s = carModels.get(position).getModelName();
-                nameTextView.setText(s);
-
-
-                return convertView;
-            }
-        });
-        branchesSpinner.setAdapter(new ArrayAdapter<Branch>(this, R.layout.spinner_view, branches) {
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
-
-
-                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
-
-                idTextView.setText(((Integer) branches.get(position).getBranchID()).toString());
-                String s = branches.get(position).getBranchName();
-                nameTextView.setText(s);
-
-
-                return convertView;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                if (convertView == null)
-                    convertView = View.inflate(AddCar.this, R.layout.spinner_view, null);
-
-
-                TextView idTextView = (TextView) convertView.findViewById(R.id.idEditText);
-                TextView nameTextView = (TextView) convertView.findViewById(R.id.nameEditText);
-
-                idTextView.setText(((Integer) branches.get(position).getBranchID()).toString());
-                String s = branches.get(position).getBranchName();
-                nameTextView.setText(s);
-
-
-                return convertView;
-            }
-        });
-
+    private int getIndexByModelCode(int modelCode) {
+        if (carModels == null) return -1;
+        for (CarModel carModel : carModels)
+            if (modelCode == carModel.getModelCode())
+                return carModels.indexOf(carModel);
+        return -1;
     }
 
     @Override

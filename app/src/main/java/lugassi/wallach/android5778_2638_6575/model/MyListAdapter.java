@@ -1,4 +1,4 @@
-package lugassi.wallach.android5778_2638_6575.controller;
+package lugassi.wallach.android5778_2638_6575.model;
 
 import android.content.Context;
 import android.view.View;
@@ -23,7 +23,9 @@ public class MyListAdapter <T> extends BaseAdapter {
     }
 
     public void setData(ArrayList<T> mData) {
-        this.mData = mData;
+        this.mData.clear();
+        this.mData.addAll(mData);
+     //   this.mData = mData;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class MyListAdapter <T> extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return -1;
+        return position;
     }
 
     @Override

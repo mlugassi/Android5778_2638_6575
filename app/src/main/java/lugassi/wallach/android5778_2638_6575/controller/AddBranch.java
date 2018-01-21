@@ -106,6 +106,14 @@ public class AddBranch extends Activity implements View.OnClickListener {
             parkingSpaceEditText.setError(getString(R.string.exceptionEmptyFileds));
             return false;
         }
+        if (!tryParseInt(parkingSpaceEditText.getText().toString())) {
+            parkingSpaceEditText.setError(getString(R.string.exceptionNumberFileds));
+            return false;
+        }
+        if (Integer.parseInt(parkingSpaceEditText.getText().toString()) < 29) {
+            parkingSpaceEditText.setError(getString(R.string.exceptionLessFileds) + " " + 30);
+            return false;
+        }
         return true;
     }
 
@@ -120,22 +128,22 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
 
-            new AsyncTask<Branch, Object, Boolean>() {
+            new AsyncTask<Branch, Object, String>() {
                 @Override
-                protected void onPostExecute(Boolean idResult) {
-                    if (idResult)
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0)
                         Toast.makeText(getBaseContext(), getString(R.string.textSuccessUpdateBranchMessage), Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.textFailedUpdateMessage) + "\n" + idResult, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                protected Boolean doInBackground(Branch... params) {
+                protected String doInBackground(Branch... params) {
                     try {
                         return db_manager.updateBranch(CarRentConst.branchToContentValues(params[0]));
                     } catch (Exception e) {
                         Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return false;
+                        return e.getMessage();
                     }
                 }
             }.execute(branch);
@@ -156,11 +164,10 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setMaxParkingSpace(maxParkingSpace);
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
-            new AsyncTask<Branch, Object, Integer>() {
+            new AsyncTask<Branch, Object, String>() {
                 @Override
-                protected void onPostExecute(Integer idResult) {
-                    super.onPostExecute(idResult);
-                    if (idResult > 0) {
+                protected void onPostExecute(String idResult) {
+                    if (tryParseInt(idResult) && Integer.parseInt(idResult) > 0) {
                         resetInput();
                         Toast.makeText(getBaseContext(), getString(R.string.textSuccessAddBranchMessage) + idResult, Toast.LENGTH_SHORT).show();
                     } else
@@ -168,17 +175,25 @@ public class AddBranch extends Activity implements View.OnClickListener {
                 }
 
                 @Override
-                protected Integer doInBackground(Branch... params) {
+                protected String doInBackground(Branch... params) {
                     try {
                         return db_manager.addBranch(CarRentConst.branchToContentValues(params[0]));
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return -1;
+                        return e.getMessage();
                     }
                 }
             }.execute(branch);
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

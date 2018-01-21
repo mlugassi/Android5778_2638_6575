@@ -18,33 +18,33 @@ public interface DB_manager {
 
     public String checkAdmin(String userName, String password) throws Exception;
 
-    public Boolean createAdmin(String userName, String password, int userID) throws Exception;
+    public String createAdmin(String userName, String password, int userID) throws Exception;
 
-    public int addCarModel(ContentValues contentValues) throws Exception;
+    public String addCarModel(ContentValues contentValues) throws Exception;
 
-    public int addCar(ContentValues contentValues) throws Exception;
+    public String addCar(ContentValues contentValues) throws Exception;
 
-    public int addCustomer(ContentValues contentValues) throws Exception;
+    public String addCustomer(ContentValues contentValues) throws Exception;
 
-    public int addBranch(ContentValues contentValues) throws Exception;
-
-
-    public boolean updateCarModel(ContentValues contentValues) throws Exception;
-
-    public boolean updateCar(ContentValues contentValues) throws Exception;
-
-    public boolean updateCustomer(ContentValues contentValues) throws Exception;
-
-    public boolean updateBranch(ContentValues contentValues) throws Exception;
+    public String addBranch(ContentValues contentValues) throws Exception;
 
 
-    public boolean removeCarModel(int modelCode) throws Exception;
+    public String updateCarModel(ContentValues contentValues) throws Exception;
 
-    public boolean removeCar(int carID) throws Exception;
+    public String updateCar(ContentValues contentValues) throws Exception;
 
-    public boolean removeCustomer(int customerID) throws Exception;
+    public String updateCustomer(ContentValues contentValues) throws Exception;
 
-    public boolean removeBranch(int branchID) throws Exception;
+    public String updateBranch(ContentValues contentValues) throws Exception;
+
+
+    public String removeCarModel(int modelCode) throws Exception;
+
+    public String removeCar(int carID) throws Exception;
+
+    public String removeCustomer(int customerID) throws Exception;
+
+    public String removeBranch(int branchID) throws Exception;
 
 
     public ArrayList<Branch> getBranches() throws Exception;
@@ -63,7 +63,7 @@ public interface DB_manager {
 
     public Car getCar(int carID) throws Exception;
 
-    public boolean removePromotion(final int customerID) throws Exception;
+    public String removePromotion(final int customerID) throws Exception;
 
-    public boolean addPromotion(ContentValues contentValues) throws Exception;
+    public String addPromotion(ContentValues contentValues) throws Exception;
 }
