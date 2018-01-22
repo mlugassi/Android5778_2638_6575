@@ -1,7 +1,7 @@
 package lugassi.wallach.android5778_2638_6575.model.entities;
 
 public class Car {
-    private static int carIDSerializer = 1;
+    private static int carIDSerializer = 1; // Unique for car id to be primary key in table
     private int reservations;
     private int branchID;
     private int modelCode;
@@ -9,7 +9,7 @@ public class Car {
     private int carID;
 
     public Car() {
-        this.carID = carIDSerializer++;
+        this.carID = carIDSerializer++; // Increase for maintaining the car id unique
         this.reservations = 0;
         this.mileage = 0;
     }

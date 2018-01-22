@@ -16,6 +16,9 @@
 // * Created by Michael on 21/11/2017.
 // */
 //
+///**
+// * Basic first work with static lists Array Lists
+// */
 //public class DB_List implements DB_manager {
 //
 //    @Override
@@ -28,6 +31,11 @@
 //        return true;
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return id number of the new car model or -1 if failed
+//     */
 //    @Override
 //    public int addCarModel(ContentValues contentValues) {
 //        CarModel carModel = CarRentConst.contentValuesToCarModel(contentValues);
@@ -38,6 +46,11 @@
 //        return carModel.getModelCode();
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return id number of the new car or -1 if failed
+//     */
 //    @Override
 //    public int addCar(ContentValues contentValues) {
 //        Car car = CarRentConst.contentValuesCar(contentValues);
@@ -48,6 +61,11 @@
 //        return car.getCarID();
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return id number of the new customer or -1 if failed
+//     */
 //    @Override
 //    public int addCustomer(ContentValues contentValues) {
 //        Customer customer = CarRentConst.contentValuesCustomer(contentValues);
@@ -59,6 +77,11 @@
 //        return customer.getCustomerID();
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return id number of the new car model or -1 if failed
+//     */
 //    @Override
 //    public int addBranch(ContentValues contentValues) {
 //        Branch branch = CarRentConst.contentValuesBranch(contentValues);
@@ -70,6 +93,11 @@
 //    }
 //
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return true if the new promotion was added or false if failed
+//     */
 //    public boolean addPromotion(ContentValues contentValues) {
 //        Promotion promotion = CarRentConst.contentValuesPromotion(contentValues);
 //        // if promotion for customer exists in promotionList don't do anything
@@ -79,6 +107,11 @@
 //        return true;
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return true if the car model was updated or false if failed
+//     */
 //    @Override
 //    public boolean updateCarModel(ContentValues contentValues) {
 //        CarModel carModel = CarRentConst.contentValuesToCarModel(contentValues);
@@ -90,6 +123,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return true if the car was updated or false if failed
+//     */
 //    @Override
 //    public boolean updateCar(ContentValues contentValues) {
 //        Car car = CarRentConst.contentValuesCar(contentValues);
@@ -101,6 +139,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return true if the customer was updated or false if failed
+//     */
 //    @Override
 //    public boolean updateCustomer(ContentValues contentValues) {
 //        Customer customer = CarRentConst.contentValuesCustomer(contentValues);
@@ -112,6 +155,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param contentValues
+//     * @return true if the branch was updated or false if failed
+//     */
 //    @Override
 //    public boolean updateBranch(ContentValues contentValues) {
 //        Branch branch = CarRentConst.contentValuesBranch(contentValues);
@@ -125,6 +173,11 @@
 //    }
 //
 //
+//    /**
+//     *
+//     * @param modelCode number
+//     * @return true if the car model was removed or false if failed
+//     */
 //    @Override
 //    public boolean removeCarModel(int modelCode) {
 //        CarModel carModel = null;
@@ -136,6 +189,11 @@
 //        return ListsDataSource.carModelsList.remove(carModel);
 //    }
 //
+//    /**
+//     *
+//     * @param carID
+//     * @return true if the car was removed or false if failed
+//     */
 //    @Override
 //    public boolean removeCar(int carID) {
 //        Car car = null;
@@ -147,6 +205,11 @@
 //        return ListsDataSource.carsList.remove(car);
 //    }
 //
+//    /**
+//     *
+//     * @param customerID
+//     * @return true if the customer was removed or false if failed
+//     */
 //    @Override
 //    public boolean removeCustomer(int customerID) {
 //        Customer customer = null;
@@ -159,6 +222,11 @@
 //        return ListsDataSource.customersList.remove(customer);
 //    }
 //
+//    /**
+//     *
+//     * @param branchID
+//     * @return true if the branch was removed or false if failed
+//     */
 //    @Override
 //    public boolean removeBranch(int branchID) {
 //        Branch branch = null;
@@ -170,7 +238,11 @@
 //        return ListsDataSource.branchesList.remove(branch);
 //    }
 //
-//
+//    /**
+//     *
+//     * @param customerID
+//     * @return true if the promotion was removed or false if failed
+//     */
 //    public boolean removePromotion(int customerID) {
 //        Promotion promotion = null;
 //        for (Promotion item : ListsDataSource.promotionsList)
@@ -181,6 +253,10 @@
 //        return ListsDataSource.promotionsList.remove(promotion);
 //    }
 //
+//    /**
+//     *
+//     * @return list of branches
+//     */
 //    @Override
 //    public ArrayList<Branch> getBranches() {
 //        ArrayList<Branch> branches = new ArrayList<Branch>();
@@ -189,6 +265,10 @@
 //        return branches;
 //    }
 //
+//    /**
+//     *
+//     * @return list of cars
+//     */
 //    @Override
 //    public ArrayList<Car> getCars() {
 //        ArrayList<Car> cars = new ArrayList<Car>();
@@ -197,6 +277,10 @@
 //        return cars;
 //    }
 //
+//    /**
+//     *
+//     * @return list of car models
+//     */
 //    @Override
 //    public ArrayList<CarModel> getCarModels() {
 //        ArrayList<CarModel> carModels = new ArrayList<CarModel>();
@@ -205,6 +289,10 @@
 //        return carModels;
 //    }
 //
+//    /**
+//     *
+//     * @return list of customers
+//     */
 //    @Override
 //    public ArrayList<Customer> getCustomers() {
 //        ArrayList<Customer> customers = new ArrayList<Customer>();
@@ -213,6 +301,12 @@
 //        return customers;
 //    }
 //
+//    /**
+//     *
+//     * @param branchID
+//     * @return existing branch from list or null if branch id doesn't exist
+//     * @throws Exception
+//     */
 //    @Override
 //    public Branch getBranch(int branchID) throws Exception {
 //        for (Branch branch : ListsDataSource.branchesList)
@@ -221,6 +315,12 @@
 //        return null;
 //    }
 //
+//    /**
+//     *
+//     * @param customerID
+//     * @return existing customer from list or null if customer id doesn't exist
+//     * @throws Exception
+//     */
 //    @Override
 //    public Customer getCustomer(int customerID) throws Exception {
 //        for (Customer customer : ListsDataSource.customersList)
@@ -229,6 +329,12 @@
 //        return null;
 //    }
 //
+//    /**
+//     *
+//     * @param modelCode
+//     * @return existing car model from list or null if car model code doesn't exist
+//     * @throws Exception
+//     */
 //    @Override
 //    public CarModel getCarModel(int modelCode) throws Exception {
 //        for (CarModel carModel : ListsDataSource.carModelsList)
@@ -237,6 +343,12 @@
 //        return null;
 //    }
 //
+//    /**
+//     *
+//     * @param carID
+//     * @return existing car from list or null if car id doesn't exist
+//     * @throws Exception
+//     */
 //    @Override
 //    public Car getCar(int carID) throws Exception {
 //        for (Car car : ListsDataSource.carsList)
@@ -245,6 +357,11 @@
 //        return null;
 //    }
 //
+//    /**
+//     *
+//     * @param customerID
+//     * @return true if customer exists or false if doesn't exist
+//     */
 //    private boolean doesCustomerExist(int customerID) {
 //        for (Customer item : ListsDataSource.customersList) {
 //            if (item.getCustomerID() == customerID) {
@@ -256,6 +373,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param modelCode
+//     * @return true if car model exists or false if doesn't exist
+//     */
 //    private boolean doesCarModelExist(int modelCode) {
 //        for (CarModel item : ListsDataSource.carModelsList) {
 //            if (item.getModelCode() == modelCode) {
@@ -267,6 +389,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param carID
+//     * @return true if car exists or false if doesn't exist
+//     */
 //    private boolean doesCarExist(int carID) {
 //        for (Car item : ListsDataSource.carsList) {
 //            if (item.getCarID() == carID) {
@@ -278,6 +405,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param branchID
+//     * @return true if branch exists or false if doesn't exist
+//     */
 //    private boolean doesBranchExist(int branchID) {
 //        for (Branch item : ListsDataSource.branchesList) {
 //            if (item.getBranchID() == branchID)
@@ -288,6 +420,11 @@
 //        return false;
 //    }
 //
+//    /**
+//     *
+//     * @param customerID
+//     * @return true if promotion exists or false if doesn't exist
+//     */
 //    private boolean doesPromotionExist(int customerID) {
 //        for (Promotion item : ListsDataSource.promotionsList) {
 //            if (item.getCustomerID() == customerID)

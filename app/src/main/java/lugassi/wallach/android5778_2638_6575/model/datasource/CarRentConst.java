@@ -11,6 +11,9 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Enums.*;
 
 public class CarRentConst {
 
+    /*
+    * Final strings for entities details
+    * */
     public static class UserConst {
         public static final String USER_NAME = "userName";
         public static final String PASSWORD = "password";
@@ -78,6 +81,16 @@ public class CarRentConst {
         public static final String IS_USED = "isUsed";
     }
 
+    /*
+    * Assistance methods to cast Content values to entities and entities to Content Values
+    * */
+
+    /**
+     *
+     * @param contentValues
+     * @exception if car model doesn't exist
+     * @return car model
+     */
     public static CarModel contentValuesToCarModel(ContentValues contentValues) {
         CarModel carModel = null;
         try {
@@ -96,6 +109,12 @@ public class CarRentConst {
         return carModel;
     }
 
+    /**
+     *
+     * @param contentValues
+     * @exception if car doesn't exist
+     * @return car
+     */
     public static Car contentValuesCar(ContentValues contentValues) {
         Car car = null;
         try {
@@ -111,6 +130,12 @@ public class CarRentConst {
         return car;
     }
 
+    /**
+     *
+     * @param contentValues
+     * @exception if customer doesn't exist
+     * @return customer
+     */
     public static Customer contentValuesCustomer(ContentValues contentValues) {
         Customer customer = new Customer();
         customer.setCreditCard(contentValues.getAsLong(CustomerConst.CREDIT_CARD));
@@ -125,6 +150,12 @@ public class CarRentConst {
         return customer;
     }
 
+    /**
+     *
+     * @param contentValues
+     * @exception if branch doesn't exist
+     * @return branch
+     */
     public static Branch contentValuesBranch(ContentValues contentValues) {
 
         Branch branch = new Branch(contentValues.getAsInteger(BranchConst.BRANCH_ID));
@@ -137,6 +168,12 @@ public class CarRentConst {
         return branch;
     }
 
+    /**
+     *
+     * @param contentValues
+     * @exception if promotion doesn't exist
+     * @return promotion
+     */
     public static Promotion contentValuesPromotion(ContentValues contentValues) {
         Promotion promotion = new Promotion();
         promotion.setCustomerID(contentValues.getAsInteger(PromotionConst.CUSTOMER_ID));
@@ -145,7 +182,11 @@ public class CarRentConst {
         return promotion;
     }
 
-
+    /**
+     *
+     * @param branch
+     * @return Content Values
+     */
     public static ContentValues branchToContentValues(Branch branch) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BranchConst.BRANCH_ID, branch.getBranchID());
@@ -158,6 +199,11 @@ public class CarRentConst {
         return contentValues;
     }
 
+    /**
+     *
+     * @param car
+     * @return Content Values
+     */
     public static ContentValues carToContentValues(Car car) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CarConst.CAR_ID, car.getCarID());
@@ -169,6 +215,11 @@ public class CarRentConst {
         return contentValues;
     }
 
+    /**
+     *
+     * @param carModel
+     * @return Content Values
+     */
     public static ContentValues carModelToContentValues(CarModel carModel) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CarModelConst.MODEL_CODE, carModel.getModelCode());
@@ -182,6 +233,11 @@ public class CarRentConst {
         return contentValues;
     }
 
+    /**
+     *
+     * @param customer
+     * @return Content Values
+     */
     public static ContentValues customerToContentValues(Customer customer) {
         ContentValues contentValues = new ContentValues();
 
@@ -198,6 +254,11 @@ public class CarRentConst {
         return contentValues;
     }
 
+    /**
+     *
+     * @param promotion
+     * @return Content Values
+     */
     public static ContentValues promotionToContentValues(Promotion promotion) {
         ContentValues contentValues = new ContentValues();
 

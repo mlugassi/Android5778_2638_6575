@@ -5,7 +5,7 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Enums.Company;
 import lugassi.wallach.android5778_2638_6575.model.entities.Enums.EngineCapacity;
 
 public class CarModel {
-    private static int modelCodeSerializer = 1;
+    private static int modelCodeSerializer = 1; // Unique for car model id to be primary key in table
     private int modelCode;
     private String modelName;
     private Company company;
@@ -16,7 +16,7 @@ public class CarModel {
     private int maxGasTank;
 
     public CarModel() {
-        this.modelCode = modelCodeSerializer++;
+        this.modelCode = modelCodeSerializer++; // Increase for maintaining the car model id unique
     }
 
     public static void setModelCodeSerializer(int modelCodeSerializer) {
