@@ -101,11 +101,7 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 @Override
                 protected String doInBackground(Car... params) {
-                    try {
-                        return db_manager.updateCar(CarRentConst.carToContentValues(params[0]));
-                    } catch (Exception e) {
-                        return e.getMessage();
-                    }
+                    return db_manager.updateCar(CarRentConst.carToContentValues(params[0]));
                 }
             }.execute(car);
 
@@ -136,11 +132,8 @@ public class AddCar extends Activity implements View.OnClickListener {
 
                 @Override
                 protected String doInBackground(Car... params) {
-                    try {
-                        return db_manager.addCar(CarRentConst.carToContentValues(params[0]));
-                    } catch (Exception e) {
-                        return e.getMessage();
-                    }
+                    return db_manager.addCar(CarRentConst.carToContentValues(params[0]));
+
                 }
             }.execute(car);
 

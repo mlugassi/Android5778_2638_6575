@@ -307,6 +307,14 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         data[2] = getString(R.string.dataCarModels);
     }
 
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -382,7 +390,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                 @Override
                                 protected ArrayList<Branch> doInBackground(Integer... params) {
                                     try {
-                                        db_manager.removeBranch(params[0]);
+                                        String result = db_manager.removeBranch(params[0]);
+                                        if (!tryParseInt(result) || Integer.parseInt(result) < 0)
+                                            errorMassage = result;
                                         return db_manager.getBranches();
                                     } catch (Exception e) {
                                         errorMassage = e.getMessage();
@@ -449,7 +459,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                 @Override
                                 protected ArrayList<Car> doInBackground(Integer... params) {
                                     try {
-                                        db_manager.removeCar(params[0]);
+                                        String result = db_manager.removeCar(params[0]);
+                                        if (!tryParseInt(result) || Integer.parseInt(result) < 0)
+                                            errorMassage = result;
                                         return db_manager.getCars();
                                     } catch (Exception e) {
                                         errorMassage = e.getMessage();
@@ -474,7 +486,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                 @Override
                                 protected ArrayList<CarModel> doInBackground(Integer... params) {
                                     try {
-                                        db_manager.removeCarModel(params[0]);
+                                        String result = db_manager.removeCarModel(params[0]);
+                                        if (!tryParseInt(result) || Integer.parseInt(result) < 0)
+                                            errorMassage = result;
                                         return db_manager.getCarModels();
                                     } catch (Exception e) {
                                         errorMassage = e.getMessage();

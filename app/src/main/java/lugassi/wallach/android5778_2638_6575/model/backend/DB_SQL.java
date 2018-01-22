@@ -117,84 +117,102 @@ public class DB_SQL implements DB_manager {
 
     /// Admin
 
-    public String createAdmin(String userName, String password, int userID) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String createAdmin(String userName, String password, int userID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(UserConst.USER_NAME, userName);
-        params.put(UserConst.PASSWORD, password);
-        params.put(UserConst.USER_ID, userID);
+            params.put(UserConst.USER_NAME, userName);
+            params.put(UserConst.PASSWORD, password);
+            params.put(UserConst.USER_ID, userID);
 
-        String results = POST(url + "Login/CreateAdmin.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Login/CreateAdmin.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) userID).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) userID).toString();
     }
 
-    public String checkAdmin(String userName, String password) throws Exception {
-        Map<String, Object> map = new LinkedHashMap<>();
+    public String checkAdmin(String userName, String password) {
+        try {
+            Map<String, Object> map = new LinkedHashMap<>();
 
-        map.put(UserConst.USER_NAME, userName);
-        map.put(UserConst.PASSWORD, password);
+            map.put(UserConst.USER_NAME, userName);
+            map.put(UserConst.PASSWORD, password);
 
-        String results = POST(url + "Login/CheckAdmin.php", map);
-        if (!(results.startsWith("Worng") || results.startsWith("User") || results.startsWith("Success"))) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Login/CheckAdmin.php", map);
+            if (!(results.startsWith("Worng") || results.startsWith("User") || results.startsWith("Success"))) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return results;
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return results;
     }
 
 ///   Branches
 
     @Override
-    public String addBranch(ContentValues contentValues) throws Exception {
+    public String addBranch(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        Map<String, Object> params = new LinkedHashMap<>();
+            params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
+            params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
+            params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
+            params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
+            params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
+            params.put(BranchConst.ACTUAL_PARKING_SPACE, contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
 
-        params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
-        params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
-        params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
-        params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
-        params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
-        params.put(BranchConst.ACTUAL_PARKING_SPACE, contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
-
-        String results = POST(url + "Branch/AddBranch.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Branch/AddBranch.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(BranchConst.BRANCH_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(BranchConst.BRANCH_ID)).toString();
     }
 
     @Override
-    public String updateBranch(ContentValues contentValues) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String updateBranch(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
-        params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
-        params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
-        params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
-        params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
-        params.put(BranchConst.ACTUAL_PARKING_SPACE, contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
+            params.put(BranchConst.BRANCH_ID, contentValues.getAsInteger(BranchConst.BRANCH_ID));
+            params.put(BranchConst.BRANCH_NAME, contentValues.getAsString(BranchConst.BRANCH_NAME));
+            params.put(BranchConst.ADDRESS, contentValues.getAsString(BranchConst.ADDRESS));
+            params.put(BranchConst.CITY, contentValues.getAsString(BranchConst.CITY));
+            params.put(BranchConst.MAX_PARKING_SPACE, contentValues.getAsInteger(BranchConst.MAX_PARKING_SPACE));
+            params.put(BranchConst.ACTUAL_PARKING_SPACE, contentValues.getAsInteger(BranchConst.ACTUAL_PARKING_SPACE));
 
-        String results = POST(url + "Branch/UpdateBranch.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Branch/UpdateBranch.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(BranchConst.BRANCH_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(BranchConst.BRANCH_ID)).toString();
     }
 
     @Override
-    public String removeBranch(int branchID) throws Exception {
+    public String removeBranch(int branchID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        Map<String, Object> params = new LinkedHashMap<>();
+            params.put(BranchConst.BRANCH_ID, branchID);
 
-        params.put(BranchConst.BRANCH_ID, branchID);
-
-        String results = POST(url + "Branch/RemoveBranch.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Branch/RemoveBranch.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) branchID).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) branchID).toString();
     }
 
     @Override
@@ -244,75 +262,73 @@ public class DB_SQL implements DB_manager {
     /// cars
 
     @Override
-    public String addCar(ContentValues contentValues) throws Exception {
+    public String addCar(ContentValues contentValues) {
+        try {
+            Map<String, Object> data = new LinkedHashMap<>();
 
-        Map<String, Object> data = new LinkedHashMap<>();
-
-        Branch branch = getBranch(contentValues.getAsInteger(CarConst.BRANCH_ID));
-        if (branch.getActualParkingSpace() + 1 > branch.getMaxParkingSpace())
-            throw new Exception("Branch Full");
-
-        branch.setActualParkingSpace(branch.getActualParkingSpace() + 1);
-        updateBranch(CarRentConst.branchToContentValues(branch));
-
-        data.put(CarConst.CAR_ID, contentValues.getAsInteger(CarConst.CAR_ID));
-        data.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
-        data.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
-        data.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
-        data.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
-
-        String results = POST(url + "Car/AddCar.php", data);
-        if (!results.startsWith("New")) {
-            updateBranch(CarRentConst.branchToContentValues(branch));
-            throw new Exception("An error occurred on the server's side");
-        }
-        return ((Integer) contentValues.getAsInteger(CarConst.CAR_ID)).toString();
-    }
-
-    @Override
-    public String updateCar(ContentValues contentValues) throws Exception {
-
-        Map<String, Object> params = new LinkedHashMap<>();
-        Car oldCar = getCar(contentValues.getAsInteger(CarConst.CAR_ID));
-
-        params.put(CarConst.CAR_ID, contentValues.getAsInteger(CarConst.CAR_ID));
-        params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
-        params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
-        params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
-        params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
-
-        if (oldCar.getBranchID() != contentValues.getAsInteger(CarConst.BRANCH_ID)) {
-            Branch oldBranch = getBranch(oldCar.getBranchID());
-            Branch newBranch = getBranch(contentValues.getAsInteger(CarConst.BRANCH_ID));
-            if (newBranch.getActualParkingSpace() + 1 > newBranch.getMaxParkingSpace())
+            Branch branch = getBranch(contentValues.getAsInteger(CarConst.BRANCH_ID));
+            if (branch.getActualParkingSpace() + 1 > branch.getMaxParkingSpace())
                 throw new Exception("Branch Full");
-            oldBranch.setActualParkingSpace(oldBranch.getActualParkingSpace() - 1);
-            newBranch.setActualParkingSpace(newBranch.getActualParkingSpace() + 1);
-            updateBranch(CarRentConst.branchToContentValues(oldBranch));
-            updateBranch(CarRentConst.branchToContentValues(newBranch));
-        }
 
-        String results = POST(url + "Car/UpdateCar.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            branch.setActualParkingSpace(branch.getActualParkingSpace() + 1);
+            updateBranch(CarRentConst.branchToContentValues(branch));
+
+            data.put(CarConst.CAR_ID, contentValues.getAsInteger(CarConst.CAR_ID));
+            data.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            data.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            data.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
+            data.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+
+            String results = POST(url + "Car/AddCar.php", data);
+            if (!results.startsWith("New")) {
+                updateBranch(CarRentConst.branchToContentValues(branch));
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CarConst.CAR_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(CarConst.CAR_ID)).toString();
     }
 
     @Override
-    public String removeCar(int carID) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
-        Car car = getCar(carID);
-        params.put(CarConst.CAR_ID, carID);
+    public String updateCar(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        String results = POST(url + "Car/RemoveCar.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            params.put(CarConst.CAR_ID, contentValues.getAsInteger(CarConst.CAR_ID));
+            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
+            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+
+            String results = POST(url + "Car/UpdateCar.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CarConst.CAR_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        Branch branch = getBranch(car.getBranchID());
-        branch.setActualParkingSpace(branch.getActualParkingSpace() - 1);
-        updateBranch(CarRentConst.branchToContentValues(branch));
-        return ((Integer) carID).toString();
+    }
+
+    @Override
+    public String removeCar(int carID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+            Car car = getCar(carID);
+            params.put(CarConst.CAR_ID, carID);
+
+            String results = POST(url + "Car/RemoveCar.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            Branch branch = getBranch(car.getBranchID());
+            branch.setActualParkingSpace(branch.getActualParkingSpace() - 1);
+            updateBranch(CarRentConst.branchToContentValues(branch));
+            return ((Integer) carID).toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @Override
@@ -358,55 +374,66 @@ public class DB_SQL implements DB_manager {
 // car models
 
     @Override
-    public String updateCarModel(ContentValues contentValues) throws Exception {
+    public String updateCarModel(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        Map<String, Object> params = new LinkedHashMap<>();
+            params.put(CarModelConst.MODEL_CODE, contentValues.getAsInteger(CarModelConst.MODEL_CODE));
+            params.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
+            params.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
+            params.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
+            params.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
+            params.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
+            params.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
 
-        params.put(CarModelConst.MODEL_CODE, contentValues.getAsInteger(CarModelConst.MODEL_CODE));
-        params.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
-        params.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
-        params.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
-        params.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
-        params.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
-        params.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
-
-        String results = POST(url + "CarModel/UpdateCarModel.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "CarModel/UpdateCarModel.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CarModelConst.MODEL_CODE)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(CarModelConst.MODEL_CODE)).toString();
     }
 
     @Override
-    public String removeCarModel(int modelCode) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String removeCarModel(int modelCode) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(CarModelConst.MODEL_CODE, modelCode);
+            params.put(CarModelConst.MODEL_CODE, modelCode);
 
-        String results = POST(url + "CarModel/RemoveCarModel.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "CarModel/RemoveCarModel.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) modelCode).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) modelCode).toString();
     }
 
     @Override
-    public String addCarModel(ContentValues contentValues) throws Exception {
-        Map<String, Object> data = new LinkedHashMap<>();
+    public String addCarModel(ContentValues contentValues) {
+        try {
+            Map<String, Object> data = new LinkedHashMap<>();
 
-        data.put(CarModelConst.MODEL_CODE, contentValues.getAsInteger(CarModelConst.MODEL_CODE));
-        data.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
-        data.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
-        data.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
-        data.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
-        data.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
-        data.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
+            data.put(CarModelConst.MODEL_CODE, contentValues.getAsInteger(CarModelConst.MODEL_CODE));
+            data.put(CarModelConst.MODEL_NAME, contentValues.getAsString(CarModelConst.MODEL_NAME));
+            data.put(CarModelConst.CAR_TYPE, contentValues.getAsString(CarModelConst.CAR_TYPE));
+            data.put(CarModelConst.COMPANY, contentValues.getAsString(CarModelConst.COMPANY));
+            data.put(CarModelConst.ENGINE_CAPACITY, contentValues.getAsString(CarModelConst.ENGINE_CAPACITY));
+            data.put(CarModelConst.MAX_GAS_TANK, contentValues.getAsInteger(CarModelConst.MAX_GAS_TANK));
+            data.put(CarModelConst.SEATS, contentValues.getAsInteger(CarModelConst.SEATS));
 
-        String results = POST(url + "CarModel/AddCarModel.php", data);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "CarModel/AddCarModel.php", data);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CarModelConst.MODEL_CODE)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(CarModelConst.MODEL_CODE)).toString();
     }
 
     @Override
@@ -455,57 +482,72 @@ public class DB_SQL implements DB_manager {
     /// customer
 
     @Override
-    public String addCustomer(ContentValues contentValues) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String addCustomer(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
-        params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
-        params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
-        params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
-        params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
-        params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
-        params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
-        params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
-        params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, 0);
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
 
-        String results = POST(url + "Customer/AddCustomer.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Customer/AddCustomer.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CustomerConst.CUSTOMER_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(CustomerConst.CUSTOMER_ID)).toString();
     }
 
     @Override
-    public String updateCustomer(ContentValues contentValues) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String updateCustomer(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
-        params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
-        params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
-        params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
-        params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
-        params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
-        params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
-        params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
-        params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
 
-        String results = POST(url + "Customer/UpdateCustomer.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Customer/UpdateCustomer.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(CustomerConst.CUSTOMER_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(CustomerConst.CUSTOMER_ID)).toString();
+
     }
 
     @Override
-    public String removeCustomer(final int customerID) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String removeCustomer(final int customerID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(CustomerConst.CUSTOMER_ID, customerID);
-        String results = POST(url + "Customer/RemoveCustomer.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            params.put(CustomerConst.CUSTOMER_ID, customerID);
+            String results = POST(url + "Customer/RemoveCustomer.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) customerID).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) customerID).toString();
+
+
     }
 
     @Override
@@ -562,32 +604,40 @@ public class DB_SQL implements DB_manager {
     /// promotions
 
     @Override
-    public String addPromotion(ContentValues contentValues) throws Exception {
+    public String addPromotion(ContentValues contentValues) {
+        try {
+            Map<String, Object> data = new LinkedHashMap<>();
 
-        Map<String, Object> data = new LinkedHashMap<>();
+            data.put(PromotionConst.CUSTOMER_ID, contentValues.getAsInteger(PromotionConst.CUSTOMER_ID));
+            data.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
+            data.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
 
-        data.put(PromotionConst.CUSTOMER_ID, contentValues.getAsInteger(PromotionConst.CUSTOMER_ID));
-        data.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
-        data.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
-
-        String results = POST(url + "Promotion/AddPromotion.php", data);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Promotion/AddPromotion.php", data);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) contentValues.getAsInteger(PromotionConst.CUSTOMER_ID)).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) contentValues.getAsInteger(PromotionConst.CUSTOMER_ID)).toString();
+
     }
 
     @Override
-    public String removePromotion(final int customerID) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
+    public String removePromotion(final int customerID) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-        params.put(PromotionConst.CUSTOMER_ID, customerID);
+            params.put(PromotionConst.CUSTOMER_ID, customerID);
 
-        String results = POST(url + "Promotion/RemovePromotion.php", params);
-        if (!results.startsWith("New")) {
-            throw new Exception("An error occurred on the server's side");
+            String results = POST(url + "Promotion/RemovePromotion.php", params);
+            if (!results.startsWith("New")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            return ((Integer) customerID).toString();
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return ((Integer) customerID).toString();
     }
 
 /// post and get

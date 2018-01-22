@@ -20,6 +20,8 @@ import lugassi.wallach.android5778_2638_6575.model.entities.Promotion;
 public class AddUser extends Activity implements View.OnClickListener {
 
     private DB_manager db_manager;
+
+
     private EditText userNameEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
@@ -118,4 +120,17 @@ public class AddUser extends Activity implements View.OnClickListener {
             addUser();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        new AsyncTask<Object, Object, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                return db_manager.removeCustomer(customerID);
+            }
+        }.execute();
+        super.onBackPressed();
+
+    }
 }
+

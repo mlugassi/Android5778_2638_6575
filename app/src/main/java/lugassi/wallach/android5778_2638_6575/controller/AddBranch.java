@@ -139,12 +139,8 @@ public class AddBranch extends Activity implements View.OnClickListener {
 
                 @Override
                 protected String doInBackground(Branch... params) {
-                    try {
-                        return db_manager.updateBranch(CarRentConst.branchToContentValues(params[0]));
-                    } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        return e.getMessage();
-                    }
+                    return db_manager.updateBranch(CarRentConst.branchToContentValues(params[0]));
+
                 }
             }.execute(branch);
 
@@ -176,11 +172,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
 
                 @Override
                 protected String doInBackground(Branch... params) {
-                    try {
-                        return db_manager.addBranch(CarRentConst.branchToContentValues(params[0]));
-                    } catch (Exception e) {
-                        return e.getMessage();
-                    }
+                    return db_manager.addBranch(CarRentConst.branchToContentValues(params[0]));
                 }
             }.execute(branch);
         } catch (Exception e) {
