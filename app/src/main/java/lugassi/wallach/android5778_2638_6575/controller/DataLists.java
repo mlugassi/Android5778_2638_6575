@@ -37,7 +37,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     private MyListAdapter carsAdapter;
     private MyListAdapter carModelsAdapter;
     private boolean onCreate = false;
-    private String errorMassage;
+    private String errorMassage = null;
 
 
     @Override

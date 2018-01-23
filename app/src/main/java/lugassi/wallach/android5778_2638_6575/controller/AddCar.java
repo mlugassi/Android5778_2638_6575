@@ -64,6 +64,7 @@ public class AddCar extends Activity implements View.OnClickListener {
                     if (result == null || branches == null || carModels == null) return;
                     car = result;
                     branchesSpinner.setSelection(getIndexByBranchID(result.getBranchID()));
+                    carModelsSpinner.setVisibility(View.GONE);
                     carModelsSpinner.setSelection(getIndexByModelCode(result.getModelCode()));
                     button.setText(getString(R.string.buttonUpdate));
                 }

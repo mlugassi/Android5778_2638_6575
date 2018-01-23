@@ -26,6 +26,8 @@ public class AddBranch extends Activity implements View.OnClickListener {
     private Button button;
     private Branch branch;
     private int branchID;
+    private String errorMassage = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,10 @@ public class AddBranch extends Activity implements View.OnClickListener {
             new AsyncTask<Integer, Object, Branch>() {
                 @Override
                 protected void onPostExecute(Branch o) {
+                    if (errorMassage != null) {
+                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                        errorMassage = null;
+                    }
                     if (o == null) return;
                     branch = o;
                     nameEditText.setText(branch.getBranchName());
@@ -69,7 +75,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
                     try {
                         return db_manager.getBranch(branchID);
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        errorMassage = e.getMessage();
                         return null;
                     }
                 }
