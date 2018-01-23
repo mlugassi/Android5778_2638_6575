@@ -37,7 +37,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
     private MyListAdapter carsAdapter;
     private MyListAdapter carModelsAdapter;
     private boolean onCreate = false;
-    private String errorMassage = null;
+    private String errorMessage;
 
 
     @Override
@@ -46,16 +46,16 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_data_lists);
         onCreate = true;
-        errorMassage = null;
+        errorMessage = null;
         setDataLists();
         db_manager = DBManagerFactory.getManager();
 
         new AsyncTask<Object, Object, ArrayList<Branch>>() {
             @Override
             protected void onPostExecute(final ArrayList<Branch> branches) {
-                if (errorMassage != null) {
-                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                    errorMassage = null;
+                if (errorMessage != null) {
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    errorMessage = null;
                 }
                 branchesAdapter = new MyListAdapter(DataLists.this, branches) {
                     @Override
@@ -82,7 +82,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 try {
                     return db_manager.getBranches();
                 } catch (Exception e) {
-                    errorMassage = e.getMessage();
+                    errorMessage = e.getMessage();
                     return new ArrayList<Branch>();
                 }
             }
@@ -90,9 +90,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         new AsyncTask<Object, Object, ArrayList<Car>>() {
             @Override
             protected void onPostExecute(final ArrayList<Car> cars) {
-                if (errorMassage != null) {
-                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                    errorMassage = null;
+                if (errorMessage != null) {
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    errorMessage = null;
                 }
                 carsAdapter = new MyListAdapter<Car>(DataLists.this, cars) {
                     @Override
@@ -111,9 +111,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                         new AsyncTask<Integer, Object, String>() {
                             @Override
                             protected void onPostExecute(String branchName) {
-                                if (errorMassage != null) {
-                                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                    errorMassage = null;
+                                if (errorMessage != null) {
+                                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                    errorMessage = null;
                                 }
 
                                 if (branchName != null)
@@ -125,7 +125,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                 try {
                                     return db_manager.getBranch(params[0]).getBranchName();
                                 } catch (Exception e) {
-                                    errorMassage = e.getMessage();
+                                    errorMessage = e.getMessage();
                                     return null;
                                 }
                             }
@@ -134,9 +134,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                         new AsyncTask<Integer, Object, CarModel>() {
                             @Override
                             protected void onPostExecute(final CarModel carModel) {
-                                if (errorMassage != null) {
-                                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                    errorMassage = null;
+                                if (errorMessage != null) {
+                                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                    errorMessage = null;
                                 }
                                 if (carModel == null) return;
                                 modelNameAndCompanyEditText.setText(carModel.getModelName() + ", " + carModel.getCompany().name());
@@ -147,7 +147,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                 try {
                                     return db_manager.getCarModel(params[0]);
                                 } catch (Exception e) {
-                                    errorMassage = e.getMessage();
+                                    errorMessage = e.getMessage();
                                     return null;
                                 }
                             }
@@ -167,7 +167,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 try {
                     return db_manager.getCars();
                 } catch (Exception e) {
-                    errorMassage = e.getMessage();
+                    errorMessage = e.getMessage();
                     return new ArrayList<Car>();
                 }
             }
@@ -175,9 +175,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         new AsyncTask<Object, Object, ArrayList<CarModel>>() {
             @Override
             protected void onPostExecute(final ArrayList<CarModel> carModels) {
-                if (errorMassage != null) {
-                    Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                    errorMassage = null;
+                if (errorMessage != null) {
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    errorMessage = null;
                 }
                 carModelsAdapter = new MyListAdapter(DataLists.this, carModels) {
                     @Override
@@ -204,7 +204,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 try {
                     return db_manager.getCarModels();
                 } catch (Exception e) {
-                    errorMassage = e.getMessage();
+                    errorMessage = e.getMessage();
                     return new ArrayList<CarModel>();
                 }
             }
@@ -222,9 +222,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             new AsyncTask<Object, Object, ArrayList<Branch>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<Branch> branches) {
-                    if (errorMassage != null) {
-                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                        errorMassage = null;
+                    if (errorMessage != null) {
+                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        errorMessage = null;
                     }
                     branchesAdapter.setData(branches);
                     branchesAdapter.notifyDataSetChanged();
@@ -235,7 +235,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     try {
                         return db_manager.getBranches();
                     } catch (Exception e) {
-                        errorMassage = e.getMessage();
+                        errorMessage = e.getMessage();
                         return new ArrayList<Branch>();
                     }
                 }
@@ -243,9 +243,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             new AsyncTask<Object, Object, ArrayList<Car>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<Car> cars) {
-                    if (errorMassage != null) {
-                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                        errorMassage = null;
+                    if (errorMessage != null) {
+                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        errorMessage = null;
                     }
                     carsAdapter.setData(cars);
                     carsAdapter.notifyDataSetChanged();
@@ -256,7 +256,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     try {
                         return db_manager.getCars();
                     } catch (Exception e) {
-                        errorMassage = e.getMessage();
+                        errorMessage = e.getMessage();
                         return new ArrayList<Car>();
                     }
                 }
@@ -264,9 +264,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             new AsyncTask<Object, Object, ArrayList<CarModel>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<CarModel> carModels) {
-                    if (errorMassage != null) {
-                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                        errorMassage = null;
+                    if (errorMessage != null) {
+                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        errorMessage = null;
                     }
                     carModelsAdapter.setData(carModels);
                     carModelsAdapter.notifyDataSetChanged();
@@ -277,7 +277,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     try {
                         return db_manager.getCarModels();
                     } catch (Exception e) {
-                        errorMassage = e.getMessage();
+                        errorMessage = e.getMessage();
                         return new ArrayList<CarModel>();
                     }
                 }
@@ -379,9 +379,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<Branch>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Branch> branches) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     branchesAdapter.setData(branches);
                                     branchesAdapter.notifyDataSetChanged();
@@ -392,10 +392,10 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         String result = db_manager.removeBranch(params[0]);
                                         if (!tryParseInt(result) || Integer.parseInt(result) < 0)
-                                            errorMassage = result;
+                                            errorMessage = result;
                                         return db_manager.getBranches();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<Branch>();
                                     }
                                 }
@@ -403,9 +403,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     carsAdapter.setData(cars);
                                     carsAdapter.notifyDataSetChanged();
@@ -416,7 +416,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         return db_manager.getCars();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<Car>();
                                     }
                                 }
@@ -424,9 +424,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<CarModel> carModels) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     carModelsAdapter.setData(carModels);
                                     carModelsAdapter.notifyDataSetChanged();
@@ -437,7 +437,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         return db_manager.getCarModels();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<CarModel>();
                                     }
                                 }
@@ -448,9 +448,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     carsAdapter.setData(cars);
                                     carsAdapter.notifyDataSetChanged();
@@ -461,10 +461,10 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         String result = db_manager.removeCar(params[0]);
                                         if (!tryParseInt(result) || Integer.parseInt(result) < 0)
-                                            errorMassage = result;
+                                            errorMessage = result;
                                         return db_manager.getCars();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<Car>();
                                     }
                                 }
@@ -475,9 +475,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<CarModel> carModels) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     carModelsAdapter.setData(carModels);
                                     carModelsAdapter.notifyDataSetChanged();
@@ -488,10 +488,10 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         String result = db_manager.removeCarModel(params[0]);
                                         if (!tryParseInt(result) || Integer.parseInt(result) < 0)
-                                            errorMassage = result;
+                                            errorMessage = result;
                                         return db_manager.getCarModels();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<CarModel>();
                                     }
                                 }
@@ -499,9 +499,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {
-                                    if (errorMassage != null) {
-                                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
-                                        errorMassage = null;
+                                    if (errorMessage != null) {
+                                        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                                        errorMessage = null;
                                     }
                                     carsAdapter.setData(cars);
                                     carsAdapter.notifyDataSetChanged();
@@ -512,7 +512,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     try {
                                         return db_manager.getCars();
                                     } catch (Exception e) {
-                                        errorMassage = e.getMessage();
+                                        errorMessage = e.getMessage();
                                         return new ArrayList<Car>();
                                     }
                                 }
