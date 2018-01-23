@@ -43,6 +43,8 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     private Button button;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener date;
+    private String errorMassage = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,10 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             new AsyncTask<Integer, Object, Customer>() {
                 @Override
                 protected void onPostExecute(Customer o) {
+                    if (errorMassage != null) {
+                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                        errorMassage = null;
+                    }
                     if (o == null) return;
                     customer = o;
                     firstNameEditText.setText(customer.getFirstName());
@@ -116,7 +122,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
                     try {
                         return db_manager.getCustomer(customerID);
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        errorMassage = e.getMessage();
                         return null;
 
                     }

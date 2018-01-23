@@ -33,6 +33,8 @@ public class AddCarModel extends Activity implements View.OnClickListener {
     private Button button;
     private CarModel carModel;
     private int modelCode;
+    private String errorMassage = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,10 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             new AsyncTask<Integer, Object, CarModel>() {
                 @Override
                 protected void onPostExecute(CarModel o) {
+                    if (errorMassage != null) {
+                        Toast.makeText(getBaseContext(), errorMassage, Toast.LENGTH_LONG).show();
+                        errorMassage = null;
+                    }
                     if (o == null) return;
                     carModel = o;
                     nameEditText.setText(carModel.getModelName());
@@ -83,7 +89,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
                     try {
                         return db_manager.getCarModel(modelCode);
                     } catch (Exception e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        errorMassage = e.getMessage();
                         return null;
                     }
                 }

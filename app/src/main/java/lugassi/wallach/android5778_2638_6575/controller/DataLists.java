@@ -75,6 +75,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     }
                 };
                 branchesAdapter.notifyDataSetChanged();
+                dataListView.setAdapter(branchesAdapter);
             }
 
             @Override

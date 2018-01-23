@@ -54,6 +54,8 @@ public class AddCar extends Activity implements View.OnClickListener {
     void setCarValues() {
         carID = getIntent().getIntExtra(CarRentConst.CarConst.CAR_ID, -1);
         if (carID >= 0) {
+            carModelsSpinner.setVisibility(View.GONE);
+
             new AsyncTask<Integer, Object, Car>() {
                 @Override
                 protected void onPostExecute(Car result) {
@@ -64,7 +66,6 @@ public class AddCar extends Activity implements View.OnClickListener {
                     if (result == null || branches == null || carModels == null) return;
                     car = result;
                     branchesSpinner.setSelection(getIndexByBranchID(result.getBranchID()));
-                    carModelsSpinner.setVisibility(View.GONE);
                     carModelsSpinner.setSelection(getIndexByModelCode(result.getModelCode()));
                     button.setText(getString(R.string.buttonUpdate));
                 }
