@@ -61,6 +61,8 @@ public interface DB_manager {
 
     public CarModel getCarModel(int modelCode) throws Exception;
 
+    ArrayList<Car> getPopularCars() throws Exception;
+
     public Car getCar(int carID) throws Exception;
 
     public String removePromotion(final int customerID);

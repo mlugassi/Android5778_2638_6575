@@ -15,6 +15,7 @@ public class ManageActivity extends Activity {
     private Button addBranchActivityButton;
     private Button addCarActivityButton;
     private Button addCarModelActivityButton;
+    private Button popularCarsButton;
     private Button dataListsButton;
     private Button myProfileButtom;
     private Button logoutButton;
@@ -35,6 +36,7 @@ public class ManageActivity extends Activity {
         addCarActivityButton = (Button) findViewById(R.id.add_car_activity_button);
         addCarModelActivityButton = (Button) findViewById(R.id.add_carModel_activity_button);
         dataListsButton = (Button) findViewById(R.id.dataListsButton);
+        popularCarsButton = (Button) findViewById(R.id.popularCarsButton);
         myProfileButtom = (Button) findViewById(R.id.myProfileButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
 
@@ -61,6 +63,12 @@ public class ManageActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ManageActivity.this, DataLists.class));
+            }
+        });
+        popularCarsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ManageActivity.this, PopularCars.class));
             }
         });
         myProfileButtom.setOnClickListener(new View.OnClickListener() {

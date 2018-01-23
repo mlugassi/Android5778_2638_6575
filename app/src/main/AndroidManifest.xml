@@ -27,6 +27,9 @@
         <activity android:name=".controller.ManageActivity" />
         <activity android:name=".controller.AddCustomer" />
         <activity android:name=".controller.AddUser" />
+        <activity
+            android:name=".controller.PopularCars"
+            android:label="@string/title_activity_popular_cars"></activity>
     </application>
 
 </manifest>

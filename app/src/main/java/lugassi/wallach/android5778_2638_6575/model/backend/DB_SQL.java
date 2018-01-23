@@ -353,6 +353,27 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
+    public ArrayList<Car> getPopularCars() throws Exception {
+        ArrayList<Car> cars = new ArrayList<Car>();
+        String results = GET(url + "Car/GetPopularCars.php");
+        if (!results.startsWith("0")) {
+            JSONArray array = new JSONObject(results).getJSONArray("cars");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                Car car = new Car(jsonObject.getInt(CarConst.CAR_ID));
+                car.setModelCode(jsonObject.getInt(CarConst.MODEL_CODE));
+                car.setBranchID(jsonObject.getInt(CarConst.BRANCH_ID));
+                car.setReservations(jsonObject.getInt(CarConst.RESERVATIONS));
+                car.setMileage(jsonObject.getInt(CarConst.MILEAGE));
+
+                cars.add(car);
+            }
+        }
+        return cars;
+    }
+
+    @Override
     public Car getCar(int carID) throws Exception {
         Map<String, Object> data = new LinkedHashMap<>();
 
