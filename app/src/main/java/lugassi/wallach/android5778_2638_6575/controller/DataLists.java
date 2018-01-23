@@ -376,6 +376,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     switch (dataSpinner.getSelectedItemPosition()) {
+                        // remove Branch
                         case 0:
                             new AsyncTask<Integer, Object, ArrayList<Branch>>() {
                                 @Override
@@ -445,6 +446,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             }.execute();
 
                             break;
+                        // remove Car
                         case 1:
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
@@ -472,6 +474,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             }.execute(((Car) dataListView.getItemAtPosition(position)).getCarID());
 
                             break;
+                        // remove CarModel
                         case 2:
                             new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
                                 @Override
