@@ -177,6 +177,7 @@ public class Login extends Activity implements View.OnClickListener {
 
     }
 
+    // static for usage for logout
     public static void setDefaults(String key, String value, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();

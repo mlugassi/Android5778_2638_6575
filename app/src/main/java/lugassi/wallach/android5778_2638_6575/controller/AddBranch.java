@@ -153,7 +153,7 @@ public class AddBranch extends Activity implements View.OnClickListener {
         try {
             if (!checkValues())
                 return;
-            int maxParkingSpace = Integer.parseInt(parkingSpaceEditText.getText().toString());
+            int maxParkingSpace = Integer.parseInt(parkingSpaceEditText.getText().toString()); // needed for option that not number inserted
 
             Branch branch = new Branch();
             branch.setAddress(addressEditText.getText().toString());

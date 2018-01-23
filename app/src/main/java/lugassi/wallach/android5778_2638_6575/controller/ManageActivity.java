@@ -17,7 +17,7 @@ public class ManageActivity extends Activity {
     private Button addCarModelActivityButton;
     private Button popularCarsButton;
     private Button dataListsButton;
-    private Button myProfileButtom;
+    private Button myProfileButton;
     private Button logoutButton;
     private int customerID;
 
@@ -37,7 +37,7 @@ public class ManageActivity extends Activity {
         addCarModelActivityButton = (Button) findViewById(R.id.add_carModel_activity_button);
         dataListsButton = (Button) findViewById(R.id.dataListsButton);
         popularCarsButton = (Button) findViewById(R.id.popularCarsButton);
-        myProfileButtom = (Button) findViewById(R.id.myProfileButton);
+        myProfileButton = (Button) findViewById(R.id.myProfileButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
 
         addBranchActivityButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +71,7 @@ public class ManageActivity extends Activity {
                 startActivity(new Intent(ManageActivity.this, PopularCars.class));
             }
         });
-        myProfileButtom.setOnClickListener(new View.OnClickListener() {
+        myProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ManageActivity.this, AddCustomer.class);
@@ -82,6 +82,7 @@ public class ManageActivity extends Activity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // clear SharedPreferences details to prevent auto Login with current customer details
                 Login.setDefaults(CarRentConst.UserConst.USER_NAME, "", ManageActivity.this);
                 Login.setDefaults(CarRentConst.UserConst.PASSWORD, "", ManageActivity.this);
 
