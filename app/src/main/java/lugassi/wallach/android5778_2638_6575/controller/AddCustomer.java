@@ -26,6 +26,7 @@ import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst;
 import lugassi.wallach.android5778_2638_6575.model.entities.Customer;
 import lugassi.wallach.android5778_2638_6575.model.entities.Enums.Gender;
 
+// Activity to add manager also as customer
 public class AddCustomer extends Activity implements View.OnClickListener {
 
     private int customerID;
@@ -92,6 +93,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
     // set customer details for option to be called to update specific branch
     void setCustomerValues() {
         customerID = getIntent().getIntExtra(CarRentConst.CustomerConst.CUSTOMER_ID, -1);
+        // if activity is called from myProfileButtom in ManageActivity
         if (customerID >= 0) {
             new AsyncTask<Integer, Object, Customer>() {
                 @Override
@@ -106,7 +108,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
                     creditCardEditText.setText(((Long) customer.getCreditCard()).toString());
                     birthDayEditText.setText(customer.getBirthDayString());
                     button.setText(getString(R.string.buttonUpdate));
-                    customerIDEditText.setVisibility(View.GONE);
+                    customerIDEditText.setVisibility(View.GONE); // cannot update id
                 }
 
                 @Override
@@ -121,7 +123,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
                 }
             }.execute(customerID);
 
-        } else resetInput();
+        } else resetInput(); // activity called from Login - set edittexts to empty strings
     }
 
     private void resetInput() {
