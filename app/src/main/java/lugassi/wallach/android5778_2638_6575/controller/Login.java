@@ -32,11 +32,11 @@ public class Login extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // remove header title
         setContentView(R.layout.activity_login);
         try {
-            db_manager = DBManagerFactory.getManager();
-            checkSharedPreferences();
+            db_manager = DBManagerFactory.getManager(); // singleton db to work with
+            checkSharedPreferences(); // check if username & password already exist this will start ManageActivity accordingly and finish current activity
             findViews();
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -45,19 +45,24 @@ public class Login extends Activity implements View.OnClickListener {
 
     private void checkSharedPreferences() {
         final String username = getDefaults(CarRentConst.UserConst.USER_NAME, this);
+        // check if username not empty
         if (!username.equals("")) {
+            // import password
             String password = getDefaults(CarRentConst.UserConst.PASSWORD, this);
+            // connect server DB and check if username and password exit in DB
             new AsyncTask<String, Object, String>() {
                 @Override
                 protected void onPostExecute(String result) {
+                    // if username and password are correct - get the string from db as declared there
                     if (result.contains("Success")) {
                         Intent intent = new Intent(Login.this, ManageActivity.class);
                         result = result.substring("Success Login:".length(), result.length() - 1);
+                        // add id and username details to send ManageActivity
                         intent.putExtra(CarRentConst.CustomerConst.CUSTOMER_ID, Integer.parseInt(result));
                         intent.putExtra(CarRentConst.UserConst.USER_NAME, username);
-
+                        // kill activity so it won't get into the stack
                         finish();
-                        Login.this.startActivity(intent);
+                        startActivity(intent);
                     }
                 }
 
@@ -86,6 +91,11 @@ public class Login extends Activity implements View.OnClickListener {
         loginButton.setOnClickListener(this);
     }
 
+    /**
+     * method to check details inserted once login button is activated
+     *
+     * @return false if username empty or too long or if password empty
+     */
     private boolean checkValues() {
         if (TextUtils.isEmpty(userNameEditText.getText().toString())) {
             userNameEditText.setError(getString(R.string.exceptionEmptyFileds));
@@ -102,24 +112,29 @@ public class Login extends Activity implements View.OnClickListener {
         return true;
     }
 
-
     void login() {
+        // check correctness of details
         if (!checkValues())
             return;
+        // run a DB process using inserted details by the user
         new AsyncTask<String, Object, String>() {
             @Override
             protected void onPostExecute(String result) {
                 if (result.contains("Success")) {
+                    // if username and password are correct - set username and password as inserted by user
                     setDefaults(CarRentConst.UserConst.USER_NAME, userNameEditText.getText().toString(), Login.this);
                     setDefaults(CarRentConst.UserConst.PASSWORD, passwordEditText.getText().toString(), Login.this);
                     Intent intent = new Intent(Login.this, ManageActivity.class);
                     result = result.substring("Success Login:".length(), result.length() - 1);
+                    // add id and username details to send ManageActivity
                     intent.putExtra(CarRentConst.CustomerConst.CUSTOMER_ID, Integer.parseInt(result));
                     intent.putExtra(CarRentConst.UserConst.USER_NAME, userNameEditText.getText().toString());
-
+                    // kill activity so it won't get into the stack
                     finish();
                     Login.this.startActivity(intent);
-                } else {
+                }
+                // details inserted in Login screen failed - show error message
+                else {
                     errorTextView.setText(result);
                     errorTextView.setVisibility(View.VISIBLE);
                 }
@@ -144,6 +159,11 @@ public class Login extends Activity implements View.OnClickListener {
         Login.this.startActivity(intent);
     }
 
+    /**
+     * overridden method implementing View.OnClickListener
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == loginButton) {
