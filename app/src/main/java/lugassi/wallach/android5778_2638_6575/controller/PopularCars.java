@@ -37,6 +37,8 @@ public class PopularCars extends Activity {
     private void findViews() {
         totalResTextView = (TextView) findViewById(R.id.totalResTextView);
         carsListView = (ListView) findViewById(R.id.carsListView);
+
+        /// get popular cars
         new AsyncTask<Object, Object, ArrayList<Car>>() {
             @Override
             protected void onPostExecute(final ArrayList<Car> cars) {
@@ -60,6 +62,8 @@ public class PopularCars extends Activity {
 
                         final Car car = (Car) cars.get(position);
                         carIdEditText.setText(((Integer) car.getCarID()).toString());
+
+                        /// get branch details
                         new AsyncTask<Integer, Object, String>() {
                             @Override
                             protected void onPostExecute(String branchName) {
@@ -83,6 +87,8 @@ public class PopularCars extends Activity {
                             }
                         }.execute(car.getBranchID());
 
+
+                        /// get car details
                         new AsyncTask<Integer, Object, CarModel>() {
                             @Override
                             protected void onPostExecute(final CarModel carModel) {

@@ -53,9 +53,11 @@ public class AddCar extends Activity implements View.OnClickListener {
 
     void setCarValues() {
         carID = getIntent().getIntExtra(CarRentConst.CarConst.CAR_ID, -1);
-        if (carID >= 0) {
+        if (carID >= 0) { // if in update mode
             carModelsSpinner.setVisibility(View.GONE);
 
+
+            /// get car details
             new AsyncTask<Integer, Object, Car>() {
                 @Override
                 protected void onPostExecute(Car result) {
@@ -91,6 +93,8 @@ public class AddCar extends Activity implements View.OnClickListener {
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
 
+
+            /// updating car
             new AsyncTask<Car, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -121,6 +125,8 @@ public class AddCar extends Activity implements View.OnClickListener {
             car.setBranchID(((Branch) branchesSpinner.getSelectedItem()).getBranchID());
             car.setModelCode(((CarModel) carModelsSpinner.getSelectedItem()).getModelCode());
 
+
+            /// adding car
             new AsyncTask<Car, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -157,6 +163,9 @@ public class AddCar extends Activity implements View.OnClickListener {
         branchesSpinner = (Spinner) findViewById(R.id.branchesSpinner);
         carModelsSpinner = (Spinner) findViewById(R.id.carModelsSpinner);
         button = (Button) findViewById(R.id.createButton);
+
+
+        /// get branches
         new AsyncTask<Object, Object, ArrayList<Branch>>() {
             @Override
             protected void onPostExecute(ArrayList<Branch> result) {
@@ -213,6 +222,8 @@ public class AddCar extends Activity implements View.OnClickListener {
             }
         }.execute();
 
+
+        /// get car models
         new AsyncTask<Object, Object, ArrayList<CarModel>>() {
             @Override
             protected void onPostExecute(ArrayList<CarModel> result) {

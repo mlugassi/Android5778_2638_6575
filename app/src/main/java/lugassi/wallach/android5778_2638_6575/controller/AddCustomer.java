@@ -97,6 +97,9 @@ public class AddCustomer extends Activity implements View.OnClickListener {
         customerID = getIntent().getIntExtra(CarRentConst.CustomerConst.CUSTOMER_ID, -1);
         // if activity is called from myProfileButtom in ManageActivity
         if (customerID >= 0) {
+
+
+            // get customer details
             new AsyncTask<Integer, Object, Customer>() {
                 @Override
                 protected void onPostExecute(Customer o) {
@@ -202,6 +205,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             customer.setGender((Gender) genderSpinner.getSelectedItem());
             customer.setBirthDay(birthDayEditText.getText().toString());
 
+            /// make update
             new AsyncTask<Object, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -245,6 +249,7 @@ public class AddCustomer extends Activity implements View.OnClickListener {
             customer.setGender((Gender) genderSpinner.getSelectedItem());
             customer.setBirthDay(birthDayEditText.getText().toString());
 
+            /// adding customer
             new AsyncTask<Object, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {

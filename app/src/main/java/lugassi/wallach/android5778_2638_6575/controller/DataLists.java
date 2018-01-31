@@ -50,6 +50,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         setDataLists();
         db_manager = DBManagerFactory.getManager();
 
+
+        /// create branches list
         new AsyncTask<Object, Object, ArrayList<Branch>>() {
             @Override
             protected void onPostExecute(final ArrayList<Branch> branches) {
@@ -88,6 +90,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 }
             }
         }.execute();
+
+
+        /// craeate cars list
         new AsyncTask<Object, Object, ArrayList<Car>>() {
             @Override
             protected void onPostExecute(final ArrayList<Car> cars) {
@@ -173,6 +178,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                 }
             }
         }.execute();
+
+
+        /// create models list
         new AsyncTask<Object, Object, ArrayList<CarModel>>() {
             @Override
             protected void onPostExecute(final ArrayList<CarModel> carModels) {
@@ -216,10 +224,14 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         resetInput();
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (!onCreate) {
+        if (!onCreate) {  /// when backing from update - update the lists
+
+           /// update branches list
             new AsyncTask<Object, Object, ArrayList<Branch>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<Branch> branches) {
@@ -241,6 +253,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     }
                 }
             }.execute();
+
+            /// update cars list
             new AsyncTask<Object, Object, ArrayList<Car>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<Car> cars) {
@@ -262,6 +276,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     }
                 }
             }.execute();
+
+            /// update model list
             new AsyncTask<Object, Object, ArrayList<CarModel>>() {
                 @Override
                 protected void onPostExecute(final ArrayList<CarModel> carModels) {
@@ -301,6 +317,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
         dataListView.setAdapter(null);
     }
 
+    /// create the data list spinner list
     void setDataLists() {
         data = new String[3];
         data[0] = getString(R.string.dataBranches);
@@ -335,6 +352,9 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+
+        /// opennig remove or update dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(getString(R.string.textDialogTitle));
@@ -365,6 +385,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                     default:
                         return;
                 }
+
+                /// open activity in update mode
                 Intent myIntent = new Intent(DataLists.this, nxtActivity);
                 myIntent.putExtra(ID, id);
                 onCreate = false;
@@ -376,8 +398,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     switch (dataSpinner.getSelectedItemPosition()) {
-                        // remove Branch
                         case 0:
+                            // remove Branch
                             new AsyncTask<Integer, Object, ArrayList<Branch>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Branch> branches) {
@@ -402,6 +424,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     }
                                 }
                             }.execute(((Branch) dataListView.getItemAtPosition(position)).getBranchID());
+                            /// update cars if there is change
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {
@@ -423,6 +446,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     }
                                 }
                             }.execute();
+
+                            /// update models if there is change
                             new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<CarModel> carModels) {
@@ -446,8 +471,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             }.execute();
 
                             break;
-                        // remove Car
                         case 1:
+                            // remove Car
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {
@@ -474,8 +499,8 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                             }.execute(((Car) dataListView.getItemAtPosition(position)).getCarID());
 
                             break;
-                        // remove CarModel
                         case 2:
+                            // remove CarModel
                             new AsyncTask<Integer, Object, ArrayList<CarModel>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<CarModel> carModels) {
@@ -500,6 +525,7 @@ public class DataLists extends Activity implements AdapterView.OnItemSelectedLis
                                     }
                                 }
                             }.execute(((CarModel) dataListView.getItemAtPosition(position)).getModelCode());
+                           // update cars that changed
                             new AsyncTask<Integer, Object, ArrayList<Car>>() {
                                 @Override
                                 protected void onPostExecute(ArrayList<Car> cars) {

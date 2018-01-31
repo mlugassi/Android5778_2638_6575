@@ -63,8 +63,9 @@ public class AddCarModel extends Activity implements View.OnClickListener {
 
     void setCarModelValues() {
         modelCode = getIntent().getIntExtra(CarRentConst.CarModelConst.MODEL_CODE, -1);
-        if (modelCode >= 0) {
+        if (modelCode >= 0) { // if in update mode
 
+            /// get modek details
             new AsyncTask<Integer, Object, CarModel>() {
                 @Override
                 protected void onPostExecute(CarModel o) {
@@ -169,6 +170,8 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
 
+
+            /// update the model
             new AsyncTask<CarModel, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -205,6 +208,7 @@ public class AddCarModel extends Activity implements View.OnClickListener {
             carModel.setMaxGasTank(maxGasTank);
             carModel.setSeats(seats);
 
+            /// adding model
             new AsyncTask<Object, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {

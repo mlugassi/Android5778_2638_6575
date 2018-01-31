@@ -77,6 +77,9 @@ public class AddUser extends Activity implements View.OnClickListener {
                 return;
             final String userName = userNameEditText.getText().toString();
             final String password = passwordEditText.getText().toString();
+
+
+            /// adding new user
             new AsyncTask<Object, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -123,6 +126,8 @@ public class AddUser extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
+
+        /// if cancel - remove custemr profile that created before
         new AsyncTask<Object, Object, String>() {
             @Override
             protected String doInBackground(Object... params) {

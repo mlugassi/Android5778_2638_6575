@@ -134,6 +134,8 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
 
+
+            /// update the branch
             new AsyncTask<Branch, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
@@ -166,6 +168,8 @@ public class AddBranch extends Activity implements View.OnClickListener {
             branch.setMaxParkingSpace(maxParkingSpace);
             branch.setCity(cityEditText.getText().toString());
             branch.setBranchName(nameEditText.getText().toString());
+
+            /// adding branch
             new AsyncTask<Branch, Object, String>() {
                 @Override
                 protected void onPostExecute(String idResult) {
