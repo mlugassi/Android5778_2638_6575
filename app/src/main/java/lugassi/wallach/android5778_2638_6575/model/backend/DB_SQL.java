@@ -267,9 +267,9 @@ public class DB_SQL implements DB_manager {
             Map<String, Object> data = new LinkedHashMap<>();
 
             Branch branch = getBranch(contentValues.getAsInteger(CarConst.BRANCH_ID));
-            if (branch.getActualParkingSpace() + 1 > branch.getMaxParkingSpace())
+            if (branch.getActualParkingSpace() + 1 > branch.getMaxParkingSpace()) // check if branh not full
                 throw new Exception("Branch Full");
-
+            // update branch space
             branch.setActualParkingSpace(branch.getActualParkingSpace() + 1);
             updateBranch(CarRentConst.branchToContentValues(branch));
 
@@ -281,6 +281,7 @@ public class DB_SQL implements DB_manager {
 
             String results = POST(url + "Car/AddCar.php", data);
             if (!results.startsWith("New")) {
+                // update branch space
                 updateBranch(CarRentConst.branchToContentValues(branch));
                 throw new Exception("An error occurred on the server's side");
             }
@@ -322,6 +323,8 @@ public class DB_SQL implements DB_manager {
             if (!results.startsWith("New")) {
                 throw new Exception("An error occurred on the server's side");
             }
+
+            // update branch space
             Branch branch = getBranch(car.getBranchID());
             branch.setActualParkingSpace(branch.getActualParkingSpace() - 1);
             updateBranch(CarRentConst.branchToContentValues(branch));
